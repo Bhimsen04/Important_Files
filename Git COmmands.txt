@@ -1,0 +1,4 @@
+git init
+git status
+git add application.yml
+git commit -m "adding file"

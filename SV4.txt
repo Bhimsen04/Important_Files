@@ -1,0 +1,89 @@
+demo on Service Virtulization on 15/12/2021
+
+Some concerns we've here:-
+update from team.
+
+In helm we have to create pod for this mountebank
+instead of imposters.json, we've to kept imposters .yml file ...... otherwise we've to find a tool which converts json to yml
+variableEnabled we've to update based on the any api hit or database , or otherwise we have to everytime raise the ticket to devops guy , they will enable or disable
+	for any configuration, need to raise a ticket to devops guy
+	Circuit breaker, we can't implement here bcz we don't want in production
+	But in datatbase , we refresh the data after every 5 minutes .... so db is not valid here
+	Rather of focus on flag in applicaton.yml, we should only focus on url change in aws.
+	It will not accept in production, bca we r just mocking the data for testing.
+
+SingleHostName :- If we'll change to either mountebank or actual , it will reflect all the api e.g eisl , eisl all api's will call mountebank
+					in AWS , we'll not maintain flag , directly change the property value.(But flag option is also best in AWS)
+					First clean code in application.yml, then extensive testing also need here.	
+Two Scanories :-
+1)We can create the success mock api response
+	SingleHostName :- It is not valid bcz it will negate the other scanories, 
+			So we need multi hostname based on that we can test particular api e.g research means here we can change all of them or one.
+2)We can test system unavalibility response of all Data Processors
+	SingleHostName :- Best
+	
+Devops guy only will change the time of the sprint means after every two weeks or whenever we'll say then also they can change.
+	i think at a time of restart server means any time or we need session with devops team.
+	or based on ticket generate to devops, we'll have a SLA , it can take 2-3 days bcz it is dev. independent of deployment.
+	
+Value derived from the system parameter  defined in the AWS.
+	e.g uri : ${Research_Api_url : https://eisl-int-wmap-brd.com/api/cd/v1}
+	
+http  :- 
+https :- It expecting cert(certificate) and key  ... our BRD r working for AWS, not for kubernetes
+		 Communication between two pods(Business Rule Service and Mountebank) in AWS , is it possible with the help of http?
+		 We can call the one service to another via internal pod ...(he created http bcz we guys r using http)
+		 Through communication b/w service via internal pods if not accessible by out of server then http is also fine.
+		 
+Devops guys :- David plzs
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////		 
+brainstorm :- hold a group discussion to produce ideas or a spontaneous group discussion to produce ideas and ways of solving problems.
+for time being :- for time being we used this but in future we'll not use.
+handover :- handover the script to dev team once done.
+What exactly it is i just wanted to know.
+associated with
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+for kubernetes :- they rusing helm scripts            ...... nazar koza(Platform Team)
+for dev        :- they r using terraform scripts      ......           (Devops Team)
+
+Envirionments :- 
+	1)SBX :- Sandbox(for devops guys)
+	2)Dev .... Int .... (QA...UAT..... FAT(Performance testing) ..... Prod) higher environments
+	
+Jenkins please retry a build   // for triggering the build
+Model :- In Business_Rule_Service
+Fact :- In vaildation-rules
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+separate instance for namespace or  should be deploy one instance per kubernetes like kafka??
+We deploy kafka only in operations namespace  ..... all the services connected to one instance of kafka.
+
+ExternalNodePorts should be static bcz before deployment we should know this ..... at run time dynamic node ports r generated
+
+We can use Config_map on kubernetes side
+
+we told our requiremnts
+
+1) regarding nodeport bcz now it is creating at run time but we need static means before deployment we should have
+2) some more points we've discussed nd he will also try like that he told ...... may be today we'll connect again
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

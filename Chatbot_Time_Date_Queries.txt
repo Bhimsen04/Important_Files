@@ -1,0 +1,248 @@
+//Time(Slots) suggestion
+db.getCollection('patientSlots').aggregate([
+{$match:{pocId:486,doctorId:804,'slots.actualDate':1526236200000}},
+{$unwind:{path:'$slots',preserveNullAndEmptyArrays:true}},
+{$match:{'slots.actualDate':1526236200000}} ,
+{$project:{nextSlots:'$slots.dateSlots',preSlots:'$slots.dateSlots'}},
+{$project:{preDates:1,
+'nextSlots': {$filter: {input: '$nextSlots', as: 'nextSlots',
+cond: {$and:[ {$gt:['$$nextSlots.time',25200000]},
+{$eq:['$$nextSlots.status',0]}]}}} , 
+'preSlots': {$filter: {input: '$preSlots', as: 'preSlots',
+cond: {$and:[ {$lt:['$$preSlots.time',25200000]} ,
+{$eq:['$$preSlots.status',0]}]}}},
+}},
+{$project: {  nextSlots: { $slice: [ '$nextSlots', 3 ] }, preSlots: { $slice: [ '$preSlots', -3 ]}}},
+{$project:{slots:{$setUnion:['$nextSlots','$preSlots']}}},
+{$unwind:'$slots'},
+{$project:{ 'time':'$slots.time'}},
+{$group:{_id:null,slots:{$push:'$time'}}}
+])
+
+//Time(Slots) suggestion2
+db.getCollection('patientSlots').aggregate(
+{ '$match' : { 'pocId' : 486 , 'doctorId' : 804}}, 
+{ '$unwind' : { 'path' : '$slots' , 'preserveNullAndEmptyArrays' : true}},
+{ '$match' : { 'slots.actualDate' : 1553625000000}}, 
+{ '$project' : { 'dateSlots' : '$slots.dateSlots'}}, 
+{ '$project' : { 
+    'dateSlots' : { 
+        '$filter' : { 
+            'input' : '$dateSlots' , 
+            'as' : 'dateSlots' , 
+            'cond' : { '$and' : [ 
+                { '$gte' : [ '$$dateSlots.time' , 24600000]} , 
+                { '$lt' : [ '$$dateSlots.time' , 23400000]} , 
+                { '$eq' : [ '$$dateSlots.status' , 0]}]}}}}}, 
+{ '$unwind' : { 'path' : '$dateSlots' , 'preserveNullAndEmptyArrays' : true}},
+{ '$project' : { '_id' : 0 , 'time' : '$dateSlots.time'}}, { '$sort' : { 'time' : 1}}, 
+{ '$group' : { '_id' :  null  , 'slots' : { '$push' : '$time'}}}
+)
+
+
+//Date suggestion
+db.getCollection('patientSlots').aggregate(
+{$match:{pocId:486,doctorId:804}},
+{$project:{nextDates:'$slots',preDates:'$slots'}},
+{$project:{preDates:1,
+'nextDates': {$filter: {input: '$nextDates', as: 'slotActualDate',
+cond: { $gt: [ '$$slotActualDate.actualDate',1527100200000]}}}}},
+{$unwind:{path:'$nextDates',preserveNullAndEmptyArrays:true}},
+{$match:{$or:[{'nextDates.dateSlots.status':{$eq:0}},{'nextDates':{$exists:false}}]}},
+{$project:{preDates:1,'nextDates.actualDate':1}},
+{$group: {_id: null, nextDates: {$addToSet: '$nextDates'},preDates: {$first: '$preDates'}}},
+{$unwind:{path:'$nextDates',preserveNullAndEmptyArrays:true}},
+{$sort:{'nextDates.actualDate':1}},
+{$group: {_id: null, nextDates: {$push: '$nextDates'},preDates: {$first: '$preDates'}}},
+{$project:{preDates:1,'nextDates':{$slice:['$nextDates',3]}}},
+{$project:{nextDates:1,
+'preDates': {$filter: {input: '$preDates', as: 'slotActualDate',
+cond: { $lt: [ '$$slotActualDate.actualDate',1527100200000]}}}}},
+{$unwind:{path:'$preDates',preserveNullAndEmptyArrays:true}},
+{$match:{$or:[{'preDates.dateSlots.status':{$eq:0}},{'preDates':{$exists:false}}]}},
+{$project:{nextDates:1,'preDates.actualDate':1}},
+{$group: {_id: null, preDates: {$addToSet: '$preDates'},nextDates: {$first: '$nextDates'}}},
+{$unwind:{path:'$preDates',preserveNullAndEmptyArrays:true}},
+{$sort:{'preDates.actualDate':-1}},
+{$group: {_id: null, preDates: {$addToSet: '$preDates'},nextDates: {$first: '$nextDates'}}},
+{$project:{nextDates:1,'preDates':{$slice:['$preDates',3]}}},
+{$project:{slots:{$setUnion:['$preDates','$nextDates']}}},
+{$unwind:'$slots'},
+{$project:{actualDate:'$slots.actualDate'}},
+{$group:{_id:null,slots:{$push:'$actualDate'}}}
+)
+
+//exact time
+db.getCollection('patientSlots').aggregate(
+{$project: { pocId:1,doctorId:1,slots: {$filter: { input: '$slots', as: 'slot', cond: { $eq: [ '$$slot.actualDate', 1544725800000 ] }}}}},
+{$match:{slots:{$ne:[]},pocId:486,doctorId:804}},
+{$unwind:{path:'$slots',preserveNullAndEmptyArrays:true}},
+{$project: { 'slots.dateSlots': {$filter: { input: '$slots.dateSlots', as: 'dates',cond: { $eq: [ '$$dates.time', 23400000 ] }}}}},
+{$unwind:'$slots.dateSlots'},
+{$project:{'time':'$slots.dateSlots.time'}}
+)
+
+//exact date
+db.getCollection('patientSlots').aggregate(
+{$project: { pocId:1,doctorId:1,slots: {$filter: { input: '$slots', as: 'slot', cond: { $eq: [ '$$slot.actualDate', 1544725800000 ]}}}}},
+{$match:{slots:{$ne:[]},pocId:486,doctorId:804}},
+{$unwind:'$slots'},
+{$match:{'slots.dateSlots.status':0}},
+{$project:{_id:0,'date':'$slots.actualDate'}}
+)
+
+//ExactDateSlots (12/19/2018)
+db.getCollection('patientSlots').aggregate(
+    {$match:{pocId:486,doctorId:804}},
+    {$unwind:{path:'$slots'}},
+    {$match:{'slots.actualDate':{$gte:1545157800000}}},
+    {$group: {_id: '$doctorId' , slots : { $push : '$slots'}}},
+    {$project:{nextDates:'$slots',preDates:'$slots'}},
+    {$project:{preDates:1,'nextDates': {$filter: {input: '$nextDates', as: 'slotActualDate',cond: { $gt: [ '$$slotActualDate.actualDate',1544553000000]}}}}},
+    {$unwind:{path:'$nextDates',preserveNullAndEmptyArrays:true}},
+    {$match:{$or:[{'nextDates.dateSlots.status':{$eq:0}},{'nextDates':{$exists:false}}]}},
+    {$project:{preDates:1,'nextDates.actualDate':1}},
+    {$group: {_id: null, nextDates: {$addToSet: '$nextDates'},preDates: {$first: '$preDates'}}},
+    {$unwind:{path:'$nextDates',preserveNullAndEmptyArrays:true}},
+    {$sort:{'nextDates.actualDate':1}},
+    {$group: {_id: null, nextDates: {$push: '$nextDates'},preDates: {$first: '$preDates'}}},
+    {$project:{preDates:1,'nextDates':{$slice:['$nextDates',3]}}},
+    {$project:{nextDates:1,'preDates': {$filter: {input: '$preDates', as: 'slotActualDate',cond: { $lt: [ '$$slotActualDate.actualDate',1544553000000]}}}}},
+    {$unwind:{path:'$preDates',preserveNullAndEmptyArrays:true}},
+    {$match:{$or:[{'preDates.dateSlots.status':{$eq:0}},{'preDates':{$exists:false}}]}},
+    {$project:{nextDates:1,'preDates.actualDate':1}},
+    {$group: {_id: null, preDates: {$addToSet: '$preDates'},nextDates: {$first: '$nextDates'}}},
+    {$unwind:{path:'$preDates',preserveNullAndEmptyArrays:true}},
+    {$sort:{'preDates.actualDate':-1}},
+    {$group: {_id: null, preDates: {$addToSet: '$preDates'},nextDates: {$first: '$nextDates'}}},
+    {$project:{nextDates:1,'preDates':{$slice:['$preDates',3]}}},
+    {$project:{slots:{$setUnion:['$preDates','$nextDates']}}},
+    {$unwind:'$slots'},
+    {$project:{actualDate:'$slots.actualDate'}},
+    {$group:{_id:null,slots:{$push:'$actualDate'}}}
+)
+
+//Followup doctor
+db.getCollection('doctorFollowupAdvices').aggregate(
+{$match:{doctorName: {$regex: /Chee/i},profileId:16689}},
+{$unwind:{path:'$adviceList',preserveNullAndEmptyArrays:true}},
+{$match:{'adviceList.startDate':{$gte:1521543159051},'adviceList.endDate':{$lte:1521743399999}}})
+
+//personal Doctor
+db.getCollection('userHSPackage').aggregate(
+{$match:{profileId:16771,personalDoctor:{$ne:null}}},
+{$project:{profileId:1,empId:'$personalDoctor.empId'}},
+{ $group : { _id : "$empId", profileId: { $first: "$profileId" } } },
+{$lookup:{from: "employeeDetails",localField: "_id", foreignField: "empId", as: "doctorDetails" }},
+{ $unwind: { path: "$doctorDetails", preserveNullAndEmptyArrays: true } },
+{ $group : { _id : "$profileId", doctorDetail: { $push: "$doctorDetails" } } }),
+{$project:{_id:0,doctorDetail:1}}
+)
+//past history
+db.getCollection('slotBookingDetails').aggregate(
+{ '$match' : { 'patientProfileId' : 16771}}, 
+{ '$project' : { 'patientProfileId' : 1 , 'empId' : 1}}, 
+{ '$group' : { '_id' : '$empId' , 'patientProfileId' : { '$first' : '$patientProfileId'}}}, 
+{ '$lookup' : { 'from' : 'employeeDetails' , 'localField' : '_id' , 'foreignField' : 'empId' , 'as' : 'doctorDetails'}},
+{ '$unwind' : { 'path' : '$doctorDetails' , 'preserveNullAndEmptyArrays' : true}},
+{ '$addFields' : { 'doctorFullName' : { '$concat' : [ '$doctorDetails.firstName' , ' ' , '$doctorDetails.lastName']}}},
+{ '$match' : { 'doctorFullName' : { '$regex' : 'Smith' , '$options' : 'i'}}}, 
+{ '$replaceRoot' : { 'newRoot' : '$doctorDetails'}})
+
+//Poc Address Find(12/20/2018)
+db.getCollection('employeeDetails').aggregate(
+{ "$match" : { "empId" : 804}}, 
+{ "$unwind" : { "path" : "$pocIdList" , "preserveNullAndEmptyArrays" : true}}, 
+{ "$lookup" : { "from" : "pocDetails" , "localField" : "pocIdList" , "foreignField" : "pocId" , "as" : "pocIdDetail"}}, 
+{ "$project" : { "_id" : 0 , "PocDetail" : "$pocIdDetail" , 
+            "DoctorService" : { 
+                "$filter" : { 
+                    "input" : "$serviceList" , 
+                    "as" : "serviceList" ,
+                    "cond" : { "$eq" : [ "$$serviceList.serviceId" , 211]}}}}}, 
+{ "$project" : { "PocDetail" : 1 , "serviceId" : "$DoctorService.serviceId"}}, 
+{ "$unwind" : "$serviceId"}, { "$unwind" : "$PocDetail"}, 
+{ "$project" : { "PocDetail" : 1 , 
+    "Poc" : { 
+        "$filter" : { 
+            "input" : "$PocDetail.serviceList" , 
+            "as" : "pocDetail" , 
+            "cond" : { "$eq" : [ "$$pocDetail.serviceId" , 211]}}}}}), 
+{ "$match" : { "Poc.serviceId" : 211}}), 
+{ "$project" : { "PocDetail" : 1}}, 
+{ "$replaceRoot" : { "newRoot" : "$PocDetail"}}
+)
+
+
+//IInd Flow getting doctors
+
+db.getCollection('patientSlots').aggregate(
+{$match:{ doctorId: { $in: [949,836,832,832,853,833,884,885,899,933,883,962,891,963,969,970,971,977,
+                            846,841,955,843,804,966,967,965,975,976,982,980] } }},
+{$project: {  
+    pocId : 1,
+    doctorId : 1, 
+    dateAvailable :{
+        $filter : {
+            input : '$slots',
+            as: 'slots',
+            cond : { $eq :['$$slots.actualDate',1548095400000]}}}}},
+{$match:{dateAvailable:{$ne:[]}}},
+{$unwind:{path:'$dateAvailable',preserveNullAndEmptyArrays:true}},
+{$project : {
+    pocId : 1 ,
+    doctorId : 1 ,
+    timeAvailable : {
+        $filter : {
+            input : '$dateAvailable.dateSlots',
+            as : 'dateSlots',
+            cond : { $and : [{ $eq : ['$$dateSlots.time',19800000]},
+                             { $eq : ['$$dateSlots.status',0]}]}}}}},
+{$match:{timeAvailable : {$ne :[]}}},
+{$lookup:{from:'employeeDetails',localField:'doctorId',foreignField:'empId',as:'doctorDetails'}},
+{$match : {doctorDetails : {$ne : [] }}},
+{$unwind: { path : '$doctorDetails' , preserveNullAndEmptyArrays : true}},
+{$project : { doctorId : 1 ,pocId : 1,
+    doctorFirstName : '$doctorDetails.firstName',
+    doctorLastName : { $ifNull: [ '$doctorDetails.lastName', "" ] },
+    doctorFullName : { $concat: [ '$doctorDetails.firstName', " ", { $ifNull: [ '$doctorDetails.lastName', "" ] } ] }}},
+{$lookup : {from : 'pocDetails' , localField : 'pocId' , foreignField : 'pocId' ,as : 'pocDetails'}},
+{$unwind: {path : '$pocDetails' , preserveNullAndEmptyArrays : true} },
+{$project : {
+    doctorId : 1 ,    
+    doctorFirstName : 1,
+    doctorLastName : 1,
+    doctorFullName : 1,
+    pocId : 1,
+    pocName : '$pocDetails.pocName'    
+}}
+)
+
+*********************************************************************or*******************************************************
+
+
+db.getCollection('patientSlots').aggregate(
+{$match:{ doctorId: { $in: [949,836,832,832,853,833,884,885,899,933,883,962,891,963,969,970,971,977,846,841,955,843,804,966,967,965,975,976,982,980] } }},
+{$project: {pocId : 1,doctorId : 1, dateAvailable :{$filter : {input : '$slots',as: 'slots',cond : { $eq :['$$slots.actualDate',1548095400000]}}}}},
+{$match:{dateAvailable:{$ne:[]}}},
+{$unwind:{path:'$dateAvailable',preserveNullAndEmptyArrays:true}},
+{$project : {pocId : 1 ,doctorId : 1 ,timeAvailable : {$filter : {input : '$dateAvailable.dateSlots',as : 'dateSlots',cond : { $and : [{ $eq : ['$$dateSlots.time',19800000]},{ $eq : ['$$dateSlots.status',0]}]}}}}},
+{$match:{timeAvailable : {$ne :[]}}},
+{$lookup:{from:'employeeDetails',localField:'doctorId',foreignField:'empId',as:'doctorDetails'}},
+{$match : {doctorDetails : {$ne : [] }}},
+{$unwind: { path : '$doctorDetails' , preserveNullAndEmptyArrays : true}},
+{$project : { doctorId : 1 ,pocId : 1,doctorFirstName : '$doctorDetails.firstName',doctorLastName : { $ifNull: [ '$doctorDetails.lastName', "" ] },doctorFullName : { $concat: [ '$doctorDetails.firstName', " ", { $ifNull: [ '$doctorDetails.lastName', "" ] } ] }}},
+{$lookup : {from : 'pocDetails' , localField : 'pocId' , foreignField : 'pocId' ,as : 'pocDetails'}},
+{$unwind: {path : '$pocDetails' , preserveNullAndEmptyArrays : true} },
+{$project : {_id : 0 ,doctorId : 1 , doctorFirstName : 1,doctorLastName : 1,doctorFullName : 1,pocId : 1,pocName : '$pocDetails.pocName'}}
+)
+*****************************************************************************************************************************************************
+db.getCollection('userHSPackage').aggregate(
+{$match:{$and:[{profileId:{$eq:16771}},{packageValidTo:{$lt:1552631332342}}]}},
+{$lookup : { from : 'hsPackages_chatbot' , localField : 'packageId' , foreignField : 'packageId' , as : 'hsPackages'}},
+{$match:{hsPackages:{$ne:[]}}},
+{$project:{packageId:1,packageName:1,
+    packageType : {'$arrayElemAt' : ['$hsPackages.packageType' , 0]},
+    personalDoctorType : {'$arrayElemAt' : ['$hsPackages.personalDoctorType' , 0]},
+    finalAmount: { $arrayElemAt: [ '$hsPackages.finalPrice', 0 ] }}}
+)

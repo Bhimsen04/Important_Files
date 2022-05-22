@@ -1,0 +1,66 @@
+cd..
+cls
+dir
+
+
+
+F/W to build client side appln.
+It is for SPAs(Single Page Appln) where parts of view refresh asynchronously w/o having to reload entire page. 
+
+Development Environment :- 
+Node 
+NPM(Node Package Managment)
+Angular CLI(Command Line Interface) :- It allows us to generate building blocks of angluar appls by typing commands
+   for install :- npm install -g @angular/cli
+Text Editor - VS Code 
+
+node -v
+npm -v
+ng -v (for angular cli)
+
+create new project :- ng new {projectName}
+Run application :- ng serve and npm start(It will internally call ng serve)
+
+Architecture :-
+First building block is 'Modules' :- Angular app is modular in nature.So angluar appln is collection of many individual modules
+     Every module represent feature area in our appln. e.g Admin module , User module.
+	 Every angular appln atleast one module which is the "Root module".By convention this is called "App Module".
+	 Each module is intern made of "Components" and "Serices".
+Components :- It controls the portion of view on the browser.e.g navigation component , sidebar component but angular application 
+              atleast have one component i.e Root component or AppComponent.All other components are nested components inside
+			  Root component.
+			  Each component will have "HTML" template to represent the view in the browser and "Class" controls the logic of 
+			  particula view.
+Services :- Which is basically a class that contains the buisness logic of our appln.
+
+Architecture Summary :-
+Angular App :- One or more modules 
+Module :- One or more components and services 
+Components :- HTML + Class
+Services :- Buisness Logic
+Modules interact and ultimately render the view in the browser.
+
+src->main.ts :- Which is the entry point of an angular application.
+app->app.module.ts :- which is the root module of an application. i.e AppModule
+app->app.component.ts :- which is the root component of an application.
+
+When we start or run with "ng serve" -> main.ts -> app.module.ts(AppModule) -> app.component.ts(AppComponent)
+
+When we run the command "ng serve" to start the our application the execution comes to the "main.ts" file and over here we 
+bootstrap or quick start the app module.
+In the "AppModule" we intern bootstrap or again quick start the "AppComponent".This AppComponent has two things :-
+	HTML template(app.component.html) and the class to control the view logic(app.component.ts).
+
+
+
+
+
+
+
+
+
+
+
+
+
+

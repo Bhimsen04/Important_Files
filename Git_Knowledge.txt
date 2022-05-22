@@ -1,0 +1,306 @@
+My Token :- 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
+local master branch(local repository) and origin master branch(remote repository)
+local feature branch(local repository) and origin feature branch(remote repository)
+
+
+Install Git
+Go to Git bash
+mkdir chatbot-project
+cd chatbot-project
+till now directory created so now we're going to use git commands.
+
+
+--> git init :- Convert the directory into an empty Git repository .. Because we need a local repository to work with. .. It creates .git
+--> Before the add command there were untracked files 
+--> touch :- for create a file ..... e.g touch bhim.js
+--> gedit :- for edit the file ... e.g gedit bhim.js
+--> git add :-  It is used to add the files to the staging area. 
+				Before a file is available to commit to a repository(Only for new file), the files needs to be added to the git index(Staging area).
+				if modify the file .. wi/ commit , we can use git commit -a -m "skiiping the staged area"
+	e.g git add .(It will add all the files from the local repository to the staging area)
+		git add -A
+--> git rm :-   git rm --cached delete.html // it will go from staged area to unstaged area (same as new file i.e untracked file)
+				git commit -m "deleted the waste file"
+				git rm -f delete.html  // delete from hard disk
+				rm -r --force mywebrolw  // to delete a folder
+--> git status :- This command is used to display the state of current repository and the staging area.
+					git status	
+					git status -s // shorthand
+					git status --short
+						Note: Short status flags are:
+							?? - Untracked files
+							A - Files added to stage
+							M - Modified files
+							D - Deleted files
+--> git commit :- It is used to save or recoreds the changes to the local repository. The command help us keep record of all the changes made.
+				  For reference each commit have a unique id. So always commit with a meassage(-m)
+				  git commit -a -m "" // -a(add) -m(modify) or -am
+--> git merge :- This command is used to integarate different branches into a single branch. 
+--> git pull :- It is combination of git fetch follwed by git merge command. 
+				It is used to fetch the new commits and merge changes from the remote repository to the local branch.
+				If the same branch very useful.
+--> git push :- It is used to push local repository content to a remote repository.
+--> git clone :- clone or copy of target repository into a new repository.
+--> git branch :- It is used to create, list, rename and delete branches.
+		e.g 
+			git branch              // show all the branches  
+			git branch bhimsen      // create new branch
+			git branch -d  feature  // delete the feature branch
+			git push origin -d feature-stack  // delete remote branch
+			git branch -a/-r        // to see all the remote branches
+--> git checkout :- It works together with the git branch command. Enables navigation between the branches
+					e.g git checkout master
+					If after commit,  files r deleted so this command will match with previous commit
+					e.g git checkout bhim.js  // recover last commit , if file is deleted or anything 
+					    git checkout -f  // to recover all files 
+--> git config :- It is used to set configurations like the name, email etc. This info should be provided as soon as Git is installed, 
+				  since it is used by git at every commit.
+--> git diff :- shows the differences between the changes made on a file.
+--> git log :-  It is used to see the previous commit .
+				e.g git log 
+					git log --author="purna"
+					git log --before="19-4-2020"
+					git log -p -1   // shoes only last one commit 
+					git log -p -2   // shoes only last two commits
+					
+				// How to revert the previous commit
+					git log --oneline // shows the id of last commit
+					git revert {{idName}}     // now we can check , last commit has been gone
+					git revert HEAD           // commit comes back
+--> git reset :- It is used to undo the local changes that r made to the state of a git repository. It has three primary forms :
+				--soft, --mixed, --hard etc.
+--> git stash :- Using the git stash command, developers can temporarily shelve changes made in the working directory. 
+				It allows them to quickly switch contexts when they are not quite ready to commit changes. 
+				And it allows them to more easily switch between branches/
+				
+				// Before commit we can use git stash .... if files r not ready , or we have to finish other task as well or clean repository. 
+				   means we can put the uncommited changes into a stash.
+				git stash -u //By default git ignores untracked files when doing stash. 
+							 //If those files need to be added to stash you can use -u options which tells git to include untracked files
+				git status  // repository is clean ...  
+				git stash list
+				git stash show
+				// so my bug fixed , so i can continue work on git stash
+				git stash apply ..... // we will get back the directory
+------------------------------------------------------------------------------------------------------------------
+--> git restore :-  
+	git restore <filename>  // for discard the changes in working directory or g  ....... here we mistakely changes the code in our code
+	or git checkout -- <filename> // means get back the previous commmit nd same as above ... we lost the cuurent changes(if didn't commit)
+	or git checkout -f // same as above but here for all files 
+	git restore --staged <filename>    // stage to unstage    ..... here we did add . or add --a
+					
+					
+--> git diff :- It copmares the working directory and staging area ( e.g we did changes and add via git so now it is in staging area)
+																	( again we changed in that file and now it is in only working directory)
+				Now we can use here "diff" command to see the difference 
+				e.g git diff ( --- we have removed that code and +++ we have add that part in code)
+				now if we again run: git add .(it will merge the code)
+				now if we again run: git diff .(no difference is there) 
+--> git diff --staged :- It compares previous commit and staging area. 
+--> git diff bhim.txt
+--> git diff --cached bhim.txt
+--> git diff master origin/master :- show the diff betwenn local repository, origin master and our master.
+--> git commit -a -m "kk" :- It will make a commit after staged the all tracking files. (means we don't need "add" command here) 
+							// but it will don't do for untracked e.g if we've created new file .. for that first do "git add"
+--> git rm :- It will remove the file and put into the staging area e.g git rm bhim.txt(manually if we'll delete , we have to use "add" cmd)
+--> git mv :- It will rename the file and put into the staging area e.g git mv bhim.txt bhim_renamed.txt(move(mv) and rename is same)	
+
+// we can also create .gitignore file for ignore the some files an dwe can put data into that file like :- 
+	*.log ....... /dir/ ....... static/dir .... bhim.txt
+	but if we'll do any changes inside bhim.txt , git status show the modified file bhim.txt necause it is tracked file so we first
+	we've to do untrack ...... e.g and put into the staging area e.g git rm --cached bhim.txt 
+--> git rm --cached :- from tracked to untracked but it will not remove the file just removed from index 
+						git rm --cached bhim.txt
+--> rm -rf .git :- git repository removed not exists anymore 
+--> git log -p :-   If we want to see the changes in the commit file(bcz someone commits and we also want to see the changes codewise)		
+				    It will show all the diff.
+--> git log -p -3 :- It'll show only the 3 commits.
+--> git log --stat :- It'll also show details in a short and detail.
+--> git log --pretty=oneline/short/full
+--> git log --since=2.days/weeks/months
+--> git commit --amend  // for change the old commit  ..... 
+		press 'i' button for insert and type msg .... press 'escape' button for exit and :wq
+--> git remote add origin git@github.com:bhimsen // we r giving name to our remote repository is origin
+--> git remote -v                 // to check from where we'll pull and push
+--> git push -u origin master	
+--> git config --global alias.st status  // now we can use st instead of status
+--> git config --global alias.ci commit  // now we can use ci instead of commit
+--> git config --global alias.unstage 'restore --staged --'  
+--> git commit :- If conflicts come, first solve then use this command.
+		merge conflicts come , when we did the changes in both brances and did commit, so it confused whichone he have to pick.
+--> git branch -v :- to see the last commit message
+--> git branch --merged :- show already merged branches
+--> git branch --no-merged :- not
+--> git branch -d {branch name} :- Give error if this branch is not merged, so tell to use -D					
+--> 							
+					
+					
+
+							
+							
+				
+				
+				
+--> git rebase :-   Rebasing refers to the moving or combining a sequence of commits. This is used to integrate changes from one branch to another.
+					It'll take set of commits , copy them and store them outside our repository. 
+					Advantage :- It can be used to make linear sequence of commits.
+
+					e.g git rebase master // 
+	git checkout -b chatbot2
+	add , commit .... 
+	git rebase master 
+	
+--> merge feature branch with master :- This is the final when our MR is approved
+	1) git checkout master
+	2) git merge feature  // merged the from local feature branch to local master branch 
+	3) git branch -d  feature( Because feature is completed , so now delete the branch)
+	   git push origin -d feature-stack    // delete remote branch
+	4) git commit -m "push into local master branch"
+	5) git remote add origin https://github.com(new repository link)
+	6) git remote
+	7) git remote -v    // show from where fetch and push
+	8) git push origin master or git push origin feature
+	
+	
+// Working with Remote Reposo=itories :-
+ 
+--> git remote :- we connected the local repository with the github account (Remote repository)  .... 
+				 e.g git remote add origin {git@ghg.git}
+--> git clone :- creates a local working copy of an existing remote repository ..... 
+				 e.g git clone git@ghg.git {projectName}
+--> git pull :- if i did some changes in remote so we can do ....... 
+				 e.g git pull origin master
+--> git add , git commit ....
+--> git push :- e.g git push origin master 
+	
+	
+	
+// from git online
+echo "# Git_Project1" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M master
+git remote add origin https://github.com/Bhimsen04/Git_Project1.git
+git push -u origin master
+	
+	
+	
+git fetch -v :- Do the changes in local repository, not in the working directory ... to get effect in the working directory, 
+			       need to use "git merge" ... safe ... if someone changes in the same line in the same class
+git pull  -v :- Do the changes in local repository as well as merge in the working directory.
+
+
+-> git push origin feature_add_data  ... after this we have two branches at git both have named with origin {branchname}
+		e.g git pull origin master     or   git pull origin feature_add_data
+
+In feature branch :- How to use fetch 
+Qns :- First we have to add,commit or pull,fetch the code?
+Ans :- first we can pull,fetch also but if any conflicts come then add,commit again pull,fetch the code and solve the conflict problem.
+
+....  Always pull/fetch from master branch ...........
+git fetch
+git diff master origin/master
+git merge 
+
+git pull origin master
+
+git fetch origin
+git diff master origin/master
+git merge origin/master
+
+
+git branch -m main master 
+git fetch origin
+git branch -u origin/master master
+git remote set-head origin -a
+
+
+// after this if any merge conflicts come the resolve those conflicts in feature branch only
+// if done , create MR otherwise continue do the changes .....
+// finally MR created and approved then .... above I mentioned what steps need to do for merge in master
+
+
+
+
+
+
+
+
+ppcom is executed from DB  ..... but program is not currently being used anywhere  
+expression is executed from DRDL file in Validation_Rules project from kajor
+
+Product :-
+	EQ :- Equity
+	ME :- Manual Execution
+	OP :- Option
+	
+channel :- Subject value in Headers of Token() e.g FA,HOO
+Severity :- 
+	SOFT_BLOCK :- Order placed with warning
+	HARD_BLOCK :- Order get Rejected
+
+
+In Payload
+	"Preview" : false // operation is Submitt  ...... (By default it is false)
+	"Preview" : true // operation is Validate  ...... 
+	
+	
+/////////////////////////////////////////////////////////////////////////// ANK ///////////////////////////////////////////////
+Broadrdige have so many branches :- Master, Develop ..... but main is master
+
+broderidge/master .... live code w/o bug 
+bhimsen/master   .... i'll take pull from broderige/master
+
+broderidge/develop .... developer branch
+bhimsen/develop   .... but i'll pull from broderige/master bcz in broderidge/develop branch, errors may be exist. 
+
+In master
+git fetch upstream master      .... upstream points to company(broadridge)
+git rebase upstream/master     ....
+git push origin master         .... origin master(push in my master)
+git checkout -b {branchName}   ....... created copy of master branch 
+git add .
+git commit -am ""  // add and modify
+git push origin a  // push into local github but noone see this(Means facebook account)
+
+Go to github
+Broadrdige             Bhimsen
+defalut master         defalut master
+switch to a brnch      switch to a branch
+merge pull            94354
+
+//////////////////////////////////////////////// git new branch ////////////////////////////////////////////////
+
+git checkout develop
+git checkout -b UTS-114062
+git add .
+git commit -m "UTS-114062: added"
+git push -u origin UTS-114062       // first time
+
+//////////////////////////////////////////////////// git stash ///////////////////////////////////////////////////////
+
+git stash 
+git stash pop
+
+////////////////////////////////////////////////////  git merge develop into feature //////////////////////////////////////////////
+// Through Git Commands
+git checkout develop
+git pull
+git checkout feature/$1
+git merge develop 
+git push
+
+// Through Intellij
+git checkout feature/$1
+right click on develop and update 
+right click on develop and merge into current
+VCS -> Git -> Push
+///////////////////////////////////////////////////// revert through Intellij ///////////////////////////////////////////
+ 
+i think same as restore(If we don't want the changes)
+go to commit section -> Rollbacj -> select files -> ok
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+

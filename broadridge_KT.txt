@@ -1,0 +1,205 @@
+
+app.diagrams.net
+
+
+user.setType(Objects.nonNull(order.getType()));
+Those models we need to build and publish
+
+@JsonProperty("issuerType")
+private String issuerType;
+
+reading messages from topic(Notification) 
+Zoom Project
+
+helmDeployAll.sh file(deplyment script) :- instance is only one but artifact getting changed(dev , test , spx)  
+		drools_domain = "10.34.4.2"   , drools_port = 8880
+perfect authentication ising LDAP :- metrix ......... taking the decision based on reports that tool will generate ..... .rdrl file ..... KIE workbench(Drools)    ... rules-model
+		we will create the artifacts in KIE workbench , per request how many rules r executed and failures 
+		we will create replica of common.int and then create two branches (till now we've 4 environments(int,sbx,test,dev) , for int 2 branches and for sbx 2 branches)
+		we both r working on two things at the same time and when we publish my version is differnt than from him version and then have we go to in settings and see which version
+		kie workbench use ??   we want verification in sbx environmment , don't use sbx directly ,, pick the test first(common.test) , as now its two branches, so we pick two branches
+		differntly and deploy code.if not , then we have to create a branch on top of it and make use it , if master branch have 400 rules , all rules we've to create(remeber) or
+		if any one or two rules needed according our functionality so we can create a branch with only that rule and we also have to do integration testing
+		we can create branch with empty or required rules , we can use it for our own case , own testing , but EOD the testing would be with all rules.
+		our target is to get the latest data before creating the rules model jar file we've to merge with developer branch , so for every feature branch we've to merged with
+		develop branch .
+		I've added some fields in AccountDetails and created a jar file and refered it from kie workbench , i've tested my rules and raised a MR.
+		Another guy also added some fields in Activity so then  before creating a jar file for this project(i.e rules-model) 
+			1)Another guy will go to available branches (have to add git plugin) , i will go to develop branch and click on update(if showing updates r available) and get
+			 it into local branch(Develop) and once it's done , now i can see my log or local changes ... so now making sure that my local branch(Develop) is up to date and now again
+			 click on develop branch and merge into current(featture).(Now i'm sure all other team members codes come into my local branch)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+In Business central :- 23A - E99-BN5.rdrl  (file name)
+
+rule "23A"
+	when
+		Activity(objAccountRes : accountResult!=null , acountRestrictions : accountResult.restrictions !=null )
+		Restriction( name == "IsControlStock") from acountRestrictions
+	then
+end
+when we enrich kie workbench with one of the field , so here restrictions on the attribute i.e name
+1)Attribute or field isn't created in the code
+2)Attribute's value can't be there in the field
+
+KIE workbench enrichment :- for rules 
+two cases :- 1)attribite available in the code , not populated  :- there is an API , which can get this value 
+             2)attribite not in code :- talk to BA and we've contract changes  
+
+ class A{
+	String name; // some api or anything , which populate the value into this , so now we've value available , this value i have to set in Activity class in workbench
+ }
+ 
+ // Activity object is a source of truth of all our rules ... e.g we've 1000 rules , all 1000 rules are operate on this activity object
+ // The value come to the kie workbench , it has to be in the Activity Object
+ Class Activity{
+	Account account;
+ }
+ 
+ -> Bims or any api set the values in the account object nd our responsibility is to write the processor for keep the value in activity object.
+ 
+ services - > buisness rules service -> src -> main
+ If there is field doen't belong to any processor , we've to write own processor. Processor is responsible for populate the value into that kie workbench 
+ and send it back to the activity object.
+ 
+ Bims and carma api is a rest call , whatever the rest calls we're making and whatever data we're fething from the endPoint those will be part of that processor.
+ Xsl sheet is there which field belongs to a particular processor.
+ 
+ If field itself is not there in the code and there r some placeholders fields we can use it or BA will help us whether it is a part of some contract or not
+ once our endpoints in contract ready , we can go for write a new processor and call the endpoint  
+ rules only consume , it doesn't produce anything , our processor produces the value to the activity object 
+ 
+ how we r make sure that under contract , this api is to be build , suppose we're build a new processor and this communicate to the third party api through the eisl layer and
+ eisl layer cones under contract ..... we have to talk to eisl team and get the contract json , yml file whatever it is   e.g we have third party  service i.e abc we don't have 
+ to talk to third party for contract , talk to eisl team 
+ 
+ finally :- creating a new processor i.e epam processor, epam can't directly call to third party api i.e abc , first go to eisl layer , it is provided by eisl team , 
+			ask for provide contract for abc api and that contract we've to place under contract folder ...so  ow epam processor will call abc api through this eisl contract.
+
+
+IInd Part :- helmDeployAll.sh
+-> "int" | "integration")
+	rules_map = 'com.broadridge.zoom:common.int:LATEST=*'
+	;;
+   "bhim" | "integration")
+	rules_map = 'com.broadridge.zoom:common.bhim:LATEST=*'
+	;;
+-> Whenever we've KIE workbench , we've multiple workspaces i.e int , qa etc . Whenever i'm trying to do a deployment , as part of our deployment paramter
+   i'll give with what environment i want to connect to. 
+-> -r {{environmentName}}  e.g helmDeployAll.sh -m order,trade -f 1 -r sai
+-> Whenever i create my own (common.bhim) , i have to make entry in helmDeployAll.sh and whenever i'll give -r bhim , it knows from where take the data.
+-> It will deploy in kubernate but kieworkbench , it will point to the bhim workspace
+
+			
+////////////////////////////////////////////////// Call with srikantha reddy /////////////////////////////////////////////////////////////////////
+Enrichment :- Set the new fields from one object to another
+1)BusinessRulesProcessor(Kafka class) 2)RuleExecutor 3)ActivityToRuleFactConverter
+Conversion :- Event -> Activity -> PCOM(Product Channel Operation Mode) those r fileds in table based on that we identify rules and here Rule name is file name -> List<RuleStatus> ->
+Activity is the model and RuleFact is the fact ...... because we've to add the fields in both classes i.e Enrichment
+Services calls :-
+zoom -> services -> business-rules-service -> 
+			converter -> ActivityToRuleFactConverter :- Activity(Request) to RuleFact(Response) -- > public RuleFact convert(Activity source){}
+			service ->  RuleExecutor -> it calls the convert method -> so we have method here -> Event executeRulesOnEvent(Event event){}; ... event object from kafka 
+			            Event and Activity fields r same so we're converting event to activity and pass to convert(); How?
+						Event doRules(Event event){  Activity activity = orderEventToActivityConverter.convert(event)}
+						after that they will execute some rules based on activity .... RuleFact is the input object to the rules. 
+						
+"Business logic" written in the "DRL" files. Input is rquired for the DRL files and input is ruleFact.
+
+Data we're getting from kafka and data processor(database*cache DB) or third party api) 
+
+RuleExecutor(Get the event object here) -> executeRulesOnEvent(Event event)    
+OrderEventToActivityConverter(set from entity to activity) -> 
+RuleExecutor(execute the rules after getting the activity object) , we'll fetch here PCOM values from activity object
+	executeRules(Activity) .. get PCOM i.e RuleStatus ... get elgibileRuleStatus ....... RuleFact ..... 
+	
+	
+	
+Based on the provides() method in processor , it recognize the data processor
+calling async() method , from that method calling fetch() method in processor
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Trading Proj :- Orders buy and sell
+we've 800 rules , we've to do automatic testing in postman 
+
+table :- rule_status 
+PPCOM values
+
+Product :- All , Futures , OPTION
+Program :- 
+Channel :- for Which Client
+Operation :- 
+Mode :- Add , Edit , update
+
+In postman , for every product (like equity ,option) , we've to define own pre-req(have channel in script) ...... in runner have to upload file from where we will get dynamic values
+Based on expression , we have to perform 
+
+
+
+our task is add appropirate payload and appropirate test data into that rule only. We adding requests in equity folders.
+
+
+If rule have edit code 123 , that rule we've to trigger e.g rule_name :- "Bhimsen" , edit_code :- 123
+
+If i want to fire some rule , i'll hit rule with appropirate payload and appropirate test data and token based on channel name from the postman , 
+	then only it will fire. that info. came to know us based on this PPCOM value.
+
+Basically our business rule is running from kafka listeners .... kafka producer is from some oder new service that is implemented by some other team  ....
+	this postman collection for order new service not for our business rule service , If I want to hit order api from order new service , inside that service 
+	they will initate kafka producer and our business-rules-service listen that request then we'll go ahead with our rule , attribite and enrichment process and data processor .. etc
+
+till now , we've source of firing rule only is postman.
+
+e.g for specified rule , needs equity request only , inside equity again we've three is there i.e new , replace , cancel , again based on this which req we've to select ,
+    again channel will tell us , which token we've to use.
+	means for specific rule , by taking PPCOM value as a refrence we came to know that rule should've e.g new order request under equity 
+	Response we'll get a response edit code.
+	
+	We're storing the tokens of channels in global variable pf postman while i need token based on channel get from global variable of postman 
+
+	Expression :- By using expresion we'll add data into payload but now we're not doing 
+	Collection :- ALL_RULES ..... Equity_copy 
+	Naming convention :- edit code + add/edit/update(order) + channel + rule_name 
+	in query :- Eqity falls under ALL , EQ , Equity 
+	Afer rule expression :- 
+	
+	check by Rule naming convention and URI is equity
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+->  Zoom Project -> Has Mutiple services , one is Business-Rule-Service and it will get the request from other services which could be shared-model.
+->  External Api's in the Data processor not within the zoom , this particular zoom system has to connect to some external system which is call as Eisl.
+->  If new order has been placed so and so date , that will be stored by some other service ..... our part is here to just to get the data from Database 
+    and some manipulation (column a + column b = column c) and some modification ... will do in data processor so we've now(Activity + data ) which will
+	be useful for Rulefact.
+->  Finally Rule-engine takes the Rulefact object and validates the data in that object.
+		e.g if order quantity is null then it is not allow for placing an order.
+	Means validation inside Rule-engine and what data will it validate i.e RuleFact
+	
+---> 
+->  First request comes from shared-model and OrderEventToActivityConverter class will convert Input payload/shared-model data into activity.
+->  The activity we passing to processing(Data Processors) ,  so it will add data whatever data we need and then ActivityToRuleFactConverter then
+	RuleFact to Rule-Engine.
+->  At initial we need to check field is present in Activity as well as Rulefact.
+   
+   
+   
+   
+If system is not available , which kind of response i have to send and that response is common for all processors means just want to know about structure.
+
+500 , 503
+			
+			
+ 
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+Git is version control system.
+Git stores each of the snapshots what your project looks like now in this moment. These snapshots r called commits!
+git init :- To turn the folder into a git repository
+git clone {paste url}
+l , ls , ls -la , ls -a
+rm -rf .git :- If I want a make this folder not a git repository anymore so deleting .git folder
+git branch :- show all branches of git and master is a default git branch
+git checkout {branchName} :- switch to another branch
+git status :- It tells the status of my repository right now means what changes in my code..... show yhose files
+git add {filename}   /// add into staging area
+git add . // It will add just all the changes
+git commit  // store into git history
+git commit -m "i have chenged this file"
+git log     // we can see our all commits
+
+//////// v notes.txt or vi notes.txt  :- we can edit the file in command prompt , wq command and then add , commit      .....   ////////// 
+
+//////////////////////////////////////////////////////////////// Branching /////////////////////////////////////////////////////////
+If i'm in a git means always in a branch and by default master branch
+However we make new branches for make changes w/o affecting main code so we can work in copy branch.
+
+git branch {branchName}    // creates a new branch
+git checkout {branchName}  // It switches to the new branch
+git checkout -b {branchName}  // creates a new branch and switches to the new branch
+git branch -d {branchName} // for delete a branch
+
+vim abc.txt  // for creaing a new file

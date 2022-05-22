@@ -1,0 +1,96 @@
+Hi everyone, 
+This is bhimsen
+
+today i'm going for explain about service virtulization.
+
+-> With service virtualization, we can virtualize a service and configure the service under test .. 
+	 we can use the virtualized service’s URL as a runtime dependency.
+
+So basically for service virtualization , we're going to use Mountebank.
+
+Mountebank is an open source service virtualization tool for testing microservices.
+Mountebank is a standalone application that provides a REST API to create and configure virtual services, which are called imposters 
+	in the API. 
+//	Rather than configuring the service that you are testing to point to URLs of real services, you configure it to point to the imposters 
+//	you create through mountebank.
+
+we need some prerequisite to work with mounetbank/
+	firsty we must have node js.
+	Secondly we have to install mountebank via node commands.   .... npm install -g mountebank
+	so now we can start the mountebank server using mb command. ..... mb .....  mb --allowInjection
+	
+	
+There r also so many entites in mountebank those r imposters , stubs , predicated , responses etc. and we'll discuss one by one. 
+ 
+An imposter is a network server that understands a specific protocol and is bound to a specific port. The imposter also converts the 
+	n/w request into a simplified JSON request format. and We can create n number of imposters.
+	
+It is the most integral part of MB. It is the mock server.
+	MB allows to create imposters and those imposters contains server information , i.e protocol and port number. 
+				
+An stub is a collection of request predicates and the response to use if all predicates match. If the request doesn’t match any of the stubs 
+defined, mountebank returns a default response
+	
+	In the absence of a predicate, a stub always matches, and there's never a reason to add more than one stub to an imposter
+	{
+	  "port": 3333,
+	  "protocol": "http",
+	  "stubs": [
+		{
+		  "predicates": [{
+			"deepEquals": {
+			  "query": { "key": ["first", "second"] }
+			}
+		  }],
+		  "responses": [{
+			"is": {
+			  "body": "Entire array matched"
+			}
+		  }]
+    }
+// Response generation in mountebank using predicates and responses in stubs :-
+Behaviour :- It defines post processing steps for a response.    e.g we can add wait :- after that much time response will sent
+
+Mountebank has three different response types that take entirely different approaches to generating the JSON:
+
+1) An "is" response type returns the provided JSON as-is, creating a canned response.
+2) A "proxy" response type forwards the request on to a real dependency and converts its response into a JSON response structure. 
+	You use proxies for record-playback(replay) functionality, and we describe them in chapter 5.
+3) An "inject" response type allows you to programmatically define the response JSON using JavaScript. 
+	Injection is how you can extend mountebank when its built-in capabilities don’t quite do what you need, and we cover that in chapter
+	
+Once the response is resolved, mountebank passes the JSON structure to behaviors for post-processing
+Once the response JSON is finalized, the imposter converts the JSON to a protocol-aware network response and sends it over the wire.
+
+
+{
+  "port": 3000,
+  "protocol": "http",
+  "stubs": [
+    {
+      "responses": [
+        { "is": { "body": "54" } },     
+        { "is": { "body": "21" } },     
+        { "is": { "body": "0" } }       
+      ]
+    }
+  ]
+}
+
+The first call returns 54, the second call returns 21, and the third call returns 0. If your tests need to trigger a fourth call, 
+	it will once again return 54, then 21, and 0. Mountebank treats the list of responses as an infinite list, with the first and last entries 
+	connected like a circle, the "circular buffer" data structure discussed in chapter 1.
+
+An infinite list is maintained by shifting each response to the end of the list when it is returned. You can cycle through them as many times as you need to.
+
+Your inventory service includes the product id on the path, so sending a GET to /inventory/2599b7f4 returns the inventory for product 2599b7f4, 
+	and a GET to /inventory/e1977c9e returns inventory for product e1977c9e. Let’s augment the proxy definition you set up in listing 5.1 to save the 
+	response for each product separately. Because it’s the path that varies between those requests, you need to tell mountebank to create a new is response 
+	with a path predicate. You do so using a proxy parameter called predicateGenerators. As the name indicates, the predicateGenerators are responsible for 
+	creating the predicates on the saved responses
+	
+	
+	
+--> We have One microservice, from where we're calling 10 microservices api's , then some apis r not developed for those we can call mountbank.
+--> 
+ 

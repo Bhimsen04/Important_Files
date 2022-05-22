@@ -1,0 +1,169 @@
+Rahul Shetty Academy & Code Decode
+API example :-
+Design problem industry faces:- 
+1)Mariotte Hotel(own website)(Both frontend and backend, same repository)
+2)Mariotte Hotel showing in Hotels.com,makemytrip.com,booking.com etc
+Problem1 :- If someone booked hotel not from mariotte website , booked from another website how it will connect with Mariotte DB(because it will not expose all repository to other)??
+            How it is happening day to day life?so why API is required?
+Problem2 :- Different stack in frontend and backend. After 10 years frontend changes from java to Angular because of market standard , but backend still uses java how we'll handle it??
+            How API will solve this problem??
+Mariotte Hotel guys create one class or api, in that class only method declaration is there we can call another class methods where logic have written they don't want to expose.
+when somebody hits this api , this api will call actual logic. and this api can accept any language.
+
+fron-end(Angular) -> http req and http res -> Mariotte API -> Backend(Java) -> Database.
+Http accepts any data , and JSON and XML doesn't depend upon any languages beacause every language have own libraries to parse it, so like that no problem will occur when tec stack is also different.
+API duty to do this work means API accept json or xml and which languages Mariotte r using , api will do that stuff and give to Mariotte logic class.
+
+API is a interface or communication protocol between a client(hotel.com) & server(Backend team) intended to simplify the building of client-side software.
+Covered what is API and why we required in real time.
+So we can use here REST api(web services) or sop api(legacy) but we'll use rest api for test Mariotte API.
+1) Endpoint(where api is lying) :- http://hotel.com (It is also called base url, this is the place where our api is hosted)
+   If i want to hit this api, i needd to hit this base url.
+   in google , different api's r there(maps,images,search) e.g Google.com/images, Google.com/search, Google.com/map. 
+   When we reach the server(google.com) , to which api we have to redirect that info will be given by resource(maps,images.... etc)
+   Complete endpoint :-  https://www.google.com/images/11122234 
+2)Path parameters :- These r variable parts of url path. They r typically used to point to a specific resource within a collection, such as user identify by id.
+   https://www.google.com/images/11122234 (out of so many images in a collection , i am getting any one image) .... image(resource) , 11122234(sub resource)
+   Query Parameters :- It is used to sort/filter the resources.  e.g https://www.amazon.com/orders?sort_by=2/20/2020 (key-value pair after ?)
+   https://www.google.com/search?q=newyork&rlz=1C1CHBF_enIN875IN875&sxsrf=AOaemvLQxFpSYBS3GZrJPLKjgR74cwO6vg%3A1630738632193&ei=yBgzYdibC_q81sQPiISQ2AU&oq=newyork&gs_lcp=Cgdnd3M  	
+   after ? , query parameters , these r separated by &
+3)Headers/cookies :- Headers represent the meta-data associated with the API request and response.In layman terms, we were sending additional details to API process our request.
+   e.g Content-Type: application/json , Authorization or authenticates details 
+4)api-contract :- Give me the api-contract. which contains all the things i.e base url , resource , parameters , http method , sample body... etc   
+
+
+1)API testing interview Questions  
+   1)Challenges :- 
+   1)API Documentation :- For test api we need a lot of things like endpoint, parameters, resources, payload. we can not start testing w/o any documentation.
+    if web appln testing , provide an url for a website, from browser , hit and start testing the functionality but in API things r different. 
+	But in API there is nothing like UI , its all abt data in backend , w/o knowing what data we have to snd it to server and what res being received, its hard to perform API testing.
+   2)Access to db(Beacuse mostly we have to validate with DB, Third party DB , we don't have access)
+   3)Authorization overhead(talk to api and Getting response is not that easy bcz some authorization and authentications involved , we have to authenticate ourself, 
+							so API understand this is authentication req, if API expecting "auth" so we know how "tokens" being generated and which service give u the tokens)
+	"Authentication"(auth-bearer in postman) is the process of verifying who a user is, I am a right person e.g have user to access this api or url? 
+	"Authorization" is the process of verifying what they have access to or Authorization gives those users permission to access a resource. e.g which methods access based on my role etc
+	
+	2)Questions
+	1)HTTP Methods :- When we communicate with API, we should provide one method, say what kind of info we're trying to give API. Decided by backend when designing an API.
+	     1)Post req :- Says going for create a new object on the server.(Client is postman and Server is Backend Guys) :- automatically creates ID(new Record)
+		 2)Put req :- Says obj is there , going for update the object in server with a new value.   :- (Based on ID we'll update)
+	2)Authentication techniques communicate with API's :- I am a right person to share the data
+	     1)Session/Cookie Based Authentication
+		 2)Basic Authentication(just username and password :- normal credentials)
+		 3)Digest Authentication
+		 4)OAuth(Mostly used)
+	3)What is Rest API :- It stands for Representational State Transfer. It is a set of functions(APII's) helping developers in performing requests and receive responses.
+						  Interaction is made through "HTTP Protocol" in REST API.
+	Representational State Transfer means e.g Emp Object , States(id,name) of Emp object from DB transfered over a n/w using http protocol using rest api to my client 
+	Client(Postman) -> Rest API -> Server(localhost:8080) , It is client server architecture for developing appln that can be accessed over n/w.
+	"Resource" basically means json(Req & Res) , image etc, in our case json we sending pojo to client that is resource. If we're hitting any website url , getting resource,It is identify by URI.
+	URI :- Uniform Resource Identifier and format is :- <protocol>://<service-name>/<ResourceType>/<ResourceID> e.g http://en.eikipedia.org/wiki/Represent_data_transfer
+	
+	4)How u will verify the API :- 
+		1) we'll verify the accuracy of data , see status codes, response time .
+	
+	5)we have given endpint , find Path and Query parameters for API request URL :- 
+		http://amazon.com/orders/1112345?location=IND 
+		Endpoint(where api is lying) :- http://amazon.com (It is also called base url, this is the place where our api is hosted)
+		Resource :- orders 
+		Path parameter(Generally identify by slash in url , i want to access order) :- 1112345
+		Query parameter(identify after ?) :- location=IND
+	6)Core components of http request :- Methods , Base Uniform Resource Identifier(URI) :- endpoint where API is hosted , Resources and parameters , 
+										 Request Header(what kind of data sending i.e json , xml ... key-value e.g Accept-application/json) , Request Body(Payload)
+	7)Statelessness in REST :- Everytime or in everyrequest, client needs to pass headers to server , because server is stateless.
+							Restfull web services should not keep a client state on the server.This restriction is called Statelessness.
+	7)How to represent a resource in Rest :- Using HTTP methods.
+    8)"Idempotent" in terms of math when we hit a n number of times a particular request to a particular operation , we'll get the same response i.e Idempotency
+		In case of Rest API, when we hit a particular server , n no. of times with the same req , our response should also be same , 
+																			memory given to particullar resource should also not change
+		Get, Head, Options are safe and Idempotent methods
+		Put, Delete are only Idempotent   (space is not occ)  in case of put , same row is updating(just value on that particular location changes) , 
+															  in case of Delete , onlt first time our data is changed and after that sorry , sorry ... etc, thats why Idempotent
+		Post and Patch Methods r neither safe nor Idempotent(space is increasing) , in case of post , row is increasing
+		Post is a superset of all instead of GET ... we can use anywhere , for updation , deletion ...etc
+		
+		
+		
+		
+Learn Code With Durgesh :- 
+Top Spring Boot Interview Questions [Hindi] :- https://www.youtube.com/watch?v=mStYBY5-ddQ     https://www.youtube.com/watch?v=QT0LpYCpIFk  
+youtube.com/watch?v=bdHeDZPrYec
+
+1)Coomon feature or group we can say, based on how these methods behaves while communication
+
+	1)Safe(Get, Head and OPTIONS) :- Method is safe , if request doesn't alter the state of the server.
+	2)Idempotent  :- Get , Head , Put , Delete , OPTIONS
+	3)Cacheable(Get and Head) :- Response of request can be cacheable (It can be stored and used later)
+
+2)Get request retrieves data but wa can attach header properties such as 
+  if-Modified-since , if-unModified-since , if-Match , if-None-match , if-range	
+  with additional HTTP header properties  , we can make get request conditional 
+  Request with "eTag" and if-none-match :- 
+	server will send eTag with response header and client can store this eTag and next time client request a again for the latest data , client can fire the same request with
+	the if-None-match property as a key and put eTag's value as a value in header , and if resource hasn't been change since last time then server will response with 304 not mofified
+	This response will have header but not the request body because already have the latest data so no need to send body again 
+	By not sending body  we're saving unnecessary usage of network and bandwidth
+	
+	HEAD :- Request a header w/o body , it is same as GET but w/o response body.
+			It will return only header same as a GET request.Why we need this?
+			Reason behind this is again performance
+			e.g if we want to decide before downloading large file , if file is too large , we don't want it.In this case we need to check size of response or file and only 
+			header can u give the information.
+	OPTIONS :-  A method to request communication options for the resource identifies by uri.
+				OPTIONS doesn't invoke any action or an operation on resource , but it provides necessary information for communication with that resource.
+				If we want information about server then we can put asterisk '*' , it will return options about server.
+				e.g http://www.google.com/*
+	PATCH :- A method for partial information to a resource and it represents modification of existing resource.
+			Diff between patch and put?
+			1)Patch is not Idempotent , because possibly it won't generate same outcome every time.
+			2)put replaces entire representation , patch update specific part of resource.
+			e.g for auto increment fields .... put overrideen , patch change sometimes so it have side effect
+			not(Idempotent , safe , cacheable)
+			
+////////////////////////////////////////////////////////////////////////////////// java//////////////////////////////////////////////////////////////////////////
+Explain GC process:-
+Generational GC strateogy & hotspot heap structure (Uses ages in Heap i.e young(eden,s0(survivor space),s1) generation , old generation , permanent generation)   
+1)New Object allocation
+2)when Eden space fills up Minor GC is triggered(eden pace contains max 10 object if 11 comes , GC will come and 3 point will run in gc first cycle)
+3)In minor GC unrefrenced r deleted from eden space and refrenced objected r moved to first survivor space i.e s0
+4)When again eden space is filled up then again minor GC is triggered and moved to s1 from eden and s0 because it is empty
+	whichone come from eden to s1 :- age is 1 and whichone come from s1 to s2 :- age is 2
+	in next cycle , (same process for unrefrenced or refrenced obj in eden , s0 and s1), (s0 is empty moved from eden to s0 and s1 to s0) ... and age increases because threshold is 8
+	always one is empty s0 or s1 , uses for next cycle
+Promotion :- When aged object in s0 or s1 reaches threshold ages group suppose 8 then during minor GC these aged objects will move from young gen to old gen(Tenure).
+			So here Generational GC strateogy comes into picture.
+			When old gen is full then Major GC is performed on OLD gen only
+			
+Island of Isolation :-
+ 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 
+										 

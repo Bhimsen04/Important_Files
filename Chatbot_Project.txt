@@ -1,0 +1,42 @@
+Project :- 
+1)Chatbot is not a web-socket. Web-socket is like whatsApp , always on .
+	we sent message and other guys whenever want to send he can send
+2)Chatbot is http means when we hit then only we'll get response So we are using http.
+	Here respnse confirm
+3)Java is connected with Dialogflow using Http fulfilment
+4)Book -> Android(Send JSON format to DF) -> DF -> Backend(We aggin sent response to DF) -> DF -> Android -> Display to user
+5)Dialogflow is a tool we use for chatbot.Using this tool we can make so many agents.
+	We train agent and according to that it will response.
+	It is a natural language understanding platform that makes it easy to design and 
+	integrate a conversational user interface into your mobile app,web application etc.
+6)It is android appln.
+Functionalities :- How it works?
+1)Agent
+    1)Intents :- The boat will know what we are talking about.There are so many Lines or sentences and add into Intent.
+				 According to that context saved and Boat can ask next question.
+   2)Entities :- Nothing but value.e.g DoctorName entity.
+	
+In backend , First I find which intent is hit then after that we'll process that intent's data and sent back to user.
+Behind that so many cases because user can write anything we don't know we have to handle all the cases.
+I also add intelligence in boat e.g next to next monday , tommorow , after morning etc. 
+It is a iterative process.Becuse service changed because so many user so many sentences.
+I also designed whole algorithm for chatbot.
+
+	
+Basically Healthsign technology is a healthcare domain.We can book doctor,diagnostic appointment.So there are two projects I 
+have worked in.
+So whatever operations we can do through app like booking....... even same we can do through he chatbot.We can onboard new patient
+We can navigate at different pages through chatbot and tool i was used for chatbot i.e dialogflow v1 & v2 We also migrated from 
+v1 to v2.From tool we can create agent.Every agent have own fulfilment webhook through we connect.
+We're also maintaining the contexts for chatbot.
+
+in java we detect intents and according to that we swich to particular intent class
+to bot behave more intelligence e.g mother , father , after morning based on customized entites 
+i.e time-interval and date-interval 
+
+cron batch is also there 
+
+
+
+
+

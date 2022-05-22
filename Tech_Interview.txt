@@ -1,0 +1,291 @@
+////////////////////////////////////////////////////////////////////////// Tech Stack ////////////////////////////////////////////////////////////////////
+Java :- 
+	Garbage Collection :-
+     	Islands of Isolation, 
+		generational GC strateogy & hotspot heap structure (Uses ages in Heap i.e young(eden,s0(survivor space),s1) generation , old gen , permanent gen)   
+	Thread  :-  
+		Thread pool(Executor services, (thread pool executor in java), Blockingqueue in java, CompletableFuture etc
+    Reactive framework rx java	
+	
+Java 8 Features :- FI, Predict Interface, Streams(https://www.youtube.com/watch?v=DvQVdJB4Va0&list=PLUDwpEzHYYLvTPVqVIt7tlBohABLo4gyg&index=2 .... https://www.youtube.com/watch?v=MMruoVq6160&list=PLUDwpEzHYYLtNoZUJaRJfCktwjVtOwIk3) etc
+
+DS :-
+	Bit Manipulation, Recursion, Array, Sorting, Searching, Hashing, Stack, Queue, Linkedlist, LRU cache, Tree, BST , Priority Queue, Trie, Graphs, Dynamic Programming , Adhoc Array 2D      
+
+RestApi :-
+	ResponseEntity<Employee> 
+		...... return new ResponseEntity<>(employee,HttpStatus.OK); // import org.springframework.http.ResponseEntity; // https://www.youtube.com/watch?v=OQN99DCsbvo
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)  // import com.fasterxml.jackson.annotation.JsonInclude;
+	
+Spring :- 
+	@Async
+	Filter in config file for authentication , JWT token , Cache , spring validation annotations
+	Security :- https://www.youtube.com/watch?v=JsESRaQ1iKg&list=PL9mz5SxOaAZ4CtAkkHVmslHL4XvVcJYwH  ,,  https://www.youtube.com/channel/UC-Gn7EgShAINFthjuzxi9PQ
+	https://www.youtube.com/watch?v=VVn9OG9nfH0    ,,,,,  https://www.youtube.com/watch?v=sm-8qfMWEV8&list=PLqq-6Pq4lTTYTEooakHchTGglSvkZAjnE
+	https://medium.com/swlh/spring-boot-security-jwt-hello-world-example-b479e457664c
+	Two ways to create a object 1)@Bean create a object in main class 2)@Configuration in Top of class
+	
+AWS & DevOps :- 
+Technical Guftgu(Youtube) , Learn Code With Durgesh
+
+Microservices :- https://www.youtube.com/watch?v=SbuPNXXvTJA&list=PLq3uEqRnr_2Hb9M-hz6GPVg_x9TUQ9PJA&index=24
+
+Apache Kakka :- spring boot kafka project .... https://www.youtube.com/watch?v=rqjdSbIOrJ4  .... https://www.youtube.com/watch?v=NjHYWEV_E_o&t=647s
+	kafk and Zookeeper :- https://www.youtube.com/watch?v=Hl61x0s3yeQ&list=PLxoOrmZMsAWxXBF8h_TPqYJNsh3x4GyO4
+	Kafka Manger installation using Docker Compose | Kafka | Docker | Kafka Manager
+	
+Junit :- https://www.youtube.com/watch?v=1ZsMtIXlQow&list=PLq3uEqRnr_2GYMK6_WEYRlT5kyD8qx98M
+		https://www.youtube.com/watch?v=qpK1AoFWY8k
+Gitlab :-
+Git Commands :- 
+Azile methodology :- 
+Drools KIE :- https://www.youtube.com/watch?v=82fMJ105H3s&list=PLcFdo-z-OWIkIu8fZmQkeFfvitRd57XeH
+			  https://www.youtube.com/watch?v=zQhDe_PT60Y&list=PL7GBOEoLTffH-oUoMwvgkl2epOkfeWXkG
+
+Kubernate :- https://www.youtube.com/watch?v=xi4VLYrwFgg&list=PL6XT0grm_TfhFKUv_KI_DTVr0TCincl1r&index=1
+
+Docker and Kubernate :- spring boot kafka docker
+	Docker :- https://www.youtube.com/watch?v=B9Qi3yY2yW4&list=RDCMUC4VZwhJ4T42SVHy9QbZ5rKw&index=4 & https://www.youtube.com/watch?v=2pBxoal7DY4&list=RDCMUC4VZwhJ4T42SVHy9QbZ5rKw&index=2
+			  https://www.docker.com/get-started
+			  https://www.youtube.com/watch?v=rqjdSbIOrJ4
+Intellij :- VM Options
+ZooKeeper :- 
+
+Java Reactive Programming :- webclient .... Mono and Flux
+DBeaver client and IRIS cache database , Procesdure comm. with DBs i.e (Two schemas :- Khoj and Bruteus)  ..... stored Procedure and ProcedureQuery  .... TradeCacheExecutor 
+
+postman :-
+	https://www.youtube.com/watch?v=juldrxDrSH0&list=PLhW3qG5bs-L-oT0GenwPLcJAPD_SiFK3C&index=1
+	https://www.youtube.com/watch?v=95NBave0W_k&list=PLUDwpEzHYYLt3kLIHDLVjdnmJw7BDvVdE&index=1
+
+map.forEach((k, v) -> listOfLists.add(v));
+List<String> list = Arrays.asList(strs);
+System.arrayCopy(Object src, int srcPos , Object dest , int destPos , int length);
+
+//////////////////////////////////////////////////////////////////////////// Interview //////////////////////////////////////////////////////////////////////
+Interview :-
+1)Walmart :-
+Boundary of BT()
+Zig Zag traversal in BT
+LL Traverse from m to n
+Matrix 1010010  highest number of 1's
+1 step or 2 step(stair)
+3 Api (Java Concurrency Interview Question: How to timeout a thread?) :- Future(Collable in Threadpool) , ScheduledThreadPool
+There are 3 threads that perform the same task. Main thread starts all these threads. Find out which thread gives fastest result :- Priorities
+Rest API :- Http Method :- Head vs Option
+Default garbage collector in java 8
+Rest Api status codes
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2)Blackbuck :-
+1)Given an array A[] consisting of N positive integers and an integer K,
+the task is to find the length of the smallest subarray with a sum greater than or equal to K.
+If no such subarray exists, print -1.
+
+Input: arr[] = {3, 1, 7, 1, 11}, K = 11
+Output: 3
+
+2)Car Pooling :-
+There is a car with capacity empty seats. The vehicle only drives east (i.e., it cannot turn around and drive west).
+
+You are given the integer capacity and an array trips where trip[i] = [numPassengers, from, to]
+indicates that the ith trip has numPassengersi passengers and the locations to pick them up and drop them off are fromi and toi respectively. 
+The locations are given as the number of kilometers due east from the car's initial location.
+
+Return true if it is possible to pick up and drop off all passengers for all the given trips, or false otherwise.
+
+Input: trips = [[2,1,5],[3,3,7]], capacity = 4
+Output: false
+
+Input: trips = [[2,1,5],[3,3,7]], capacity = 5
+Output: true
+  
+Input: trips = [[2,1,5],
+                [2,1,3],
+                [2,3,5],
+                [2,5,7]], capacity = 5 output =true
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3)Paytm:-
+	1)How does Java Garbage Collection work with Circular References? e.g A->B->C->A    soln is :- Islands of Isolation
+	2)Mutable to immutable class ( class Date is given) :- Because Date is inbuilt class , how we can implement cloneable.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+4)Zeta :- 
+	1)Given a binary tree root, return the largest sum of any path between any two nodes.
+	2)count palindromic substring
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+5)CropIn :-
+	1)if user hit multiple requests more than 10 times within 10 second , how we handle in spring boot before controller layer ...... ans :- using filter(not sure)
+	2)how we get 5 highest rank record from DB.
+	3)Rotational array(TC less then n)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+6)Oyo :-
+1)Sum of nodes at maximum depth of a Binary Tree
+2)Time Based Key-Value Store(Leetcode)
+	key :- time -> value
+		100 -> 10:00AM -> 20
+		100 -> 11:00AM -> 39
+		200 -> 10:00AM -> 33
+		200 -> 2pm -> 40
+		
+		get -> (100&10:30AM) :- o/p :- 20 ....... because till 10:59:59 it will consider
+		get -> (100&5pm)  :- o/p :- 39 ........ till 11AM onwards 39 is the output
+		
+Ind Round :- Shubham Waghe
+
+Interview By : Shubham Waghe
+1.  FruitBasket
+// APPLE, ORANGE
+
+// FIFO
+FruitBasket (F1) : A1, A2, O1, A3, 
+
+
+i) putApple("A1")
+ii) putOrange("O1")
+iii) takeOutFruit() => First Fruit by FIFO behavior
+iv) takeOutApple() => First Apple by FIFO behavior
+v) takeOutOrange() => First Orange by FIFO behavior
+
+I) Represent Entities
+class Orange implements Fruit {}
+class Apple implements Fruit {}
+Interface Fruit
+
+Class FruitBasket {
+	Queue<Fruit> fruits = new LinkedList<>() ;
+	Queue<Apple> apples = new LinkedList<>() ;
+	Queue<Orange> oranges = new LinkedList<>() ;
+	Public void putApple(a1){ fruits.put(a1); }
+	
+	soln2 :- we can create two queue for apple and storage ..... nodes we can store with time and we can send or we can store two static variables which stores first node
+}
+
+main() {
+// Interacting with FruitBasket
+FruitBasket f1 = new FruitBasket("F1")
+Fruit appleA1 = FruitFactory("A", A1);
+
+f1.putApple(appleA1) & so on
+Fruit FIFOFruit = f1.takeOutFruit() => A1
+Fruit FIFOApple = f1.takeOutApple();
+Fruit FIFOOrange = f1.takeOutOrange(); => Will get O1
+putting stuff in
+taking stuff out
+putting stuff in
+}
+
+
+2.  LLD
+Catalogue Registration System 
+ Restaurant 
+
+Restaurant : R1
+
+TableCategory
+2-seater-table : 6 (T1, T2, T3,T4,T5,T6)
+4-seater-table : 2 (T7, T8)
+10-seater-table : 4 (T9, T10, T11, T12)
+
+restaurants : {
+*restaurantName: R1,
+tables: {
+        2-seater-table : [T1, T2, T3,T4,T5,T6 ]
+        4-seater-table : [T7, T8 ]
+        10-seater-table : [ T9, T10, T11, T12]
+    }
+}
+
+Entities:
+class Restaurant {
+- Name : R1 (example)
+- List<RestaurantTable> restaurantTable;
+- Other Details
+
+}
+
+RestaurantTable
+- Name : T1 (Example)
+- enum TableCategory tableCategory;
+
+
+Functionality - Application Layer
+/apl/v1/createMyRestaurant
+{
+
+Queue<>
+}
+
+Persistent - Database Layer
+
+MongoDB
+- Objects (Collection)
+MySQL (RDBMS)
+
+
+Qns) at a same time 3 requests comes from 3 machines with same data for particular one api i.e addRestraurant but we have to process only one how we will do??
+-----------------------------------------------------------------------------------------------------------------------
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+7)Porter
+1)Find the last index of given element in sortedArray e.g 1 2 2 3 3 3 4 5  , 2 :- o/p = 2 // ceil of BS
+2)Design a single level parking lot with entrance and exit with a feature of hourly parking fee.
+
+
+1)System design ... CampaignController  .... but how to do validation of variables if someone passes wrong variable type in request (stuck)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+8)Turtlemint
+1)Why spring is immutable means , why we need immutable concept:- ans :- Thread-safe
+2)Circular dependencies in spring :- Ans :- @Lazy
+3)one interface and mutiple classes implementing :- Ans :- @Qualifier
+4)FindSearchInRotatedSortedArray
+5)Rest Api Questions :- Can we use XML in Rest API and 
+
+1)print leaf nodes
+2)Implement cache :- i answered via ..... Map<Id , user> .... he told me we'll also use singleton pattern here  
+3)implement singleton in multitasking
+    static Calender getCalenderIns() {  // not at the method level ..... time increases because if comes only for first hit
+			if(c==null)
+				synchronized (args) {   // here only
+					
+				}
+			return c;
+	}
+4)Array in main method and i want to sort in child thread .... how we will sort (finally we need both arrays)
+5)Is circular linked List
+6)How to remove element from arrayList based on employee id
+    while (itr.hasNext()) {
+			Employee e = itr.next();
+			if (e.id == 5)
+				itr.remove();
+	}  // will work
+7)Map internal implementation
+
+
+1)Shortening the URLs
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+9)zwayam
+1)spring boot :- customized aop i.e set time for method execution
+2)www.google.com :- what is going behind that :- cloud ...... How DNS is working.(google is DNS name how IP adrresses matches)
+3)MongoDB Sharding and Replicating
+4)Solid principles in java
+MongoDB Replicating :- MongoDB replication is the process of creating a copy of the same data set in more than one MongoDB server. 
+					   This can be achieved by using a "Replica Set". A replica set is a group of MongoDB instances that maintain the same data set and pertain to any mongod proces.
+
+Replication provides redundancy and increases data availability with multiple copies of data on different database servers. 
+Replication protects a database from the loss of a single server. 
+Replication also allows you to recover from hardware failure and service interruptions.
+
+We have a lot of data :- Optimization , Indexing , Sharding
+Sharding :- we are partioning the pizza according to each friends share just like we have servers which are going to be taking the load of the requests which r being sent to it
+			we can't pizza 
+			
+			OYO | Bhimsen
+			
+
+
+
+
+
+
+
+

@@ -1,0 +1,141 @@
+postman :- It is basically a UI tool we can perform the API testing. 
+
+API/Web Services testing using postman tool
+
+All API's r not web services because i've implemented one API & just testing it via postman w/o internet and not put on the web(Internet) 
+all web services r API's only  because here i put the API on the web
+
+Wen service is an API wrapped in HTTP(Web).
+Two types of web services :-
+1)SOAP(Only XML format and only post request)
+2)Restful
+
+
+In Postman everything will store in the network means it will create a workspace internally and it will create a workspace by using gmail account.
+We can also create a new workspace means new project
+Main entity is a collection(suite) , It contains a multiple requests(Get , post ...) and every request is consider as a one test case 
+http://reqres.in/api/users?page=2  -------> URI(Uniform Resource Identifier)  // means whole thing identifying the resource
+	http://reqres.in ----> endpoint or Domain
+	/api/users       ----> Path parameters
+	page=2           ----> Query parameters(for filter)   
+http://reqres.in/api/users/2
+    here no filteration means we need a record who have student id = 2
+http://reqres.in/api/login
+	Request :- 
+	{
+		"email": "eve.holt@reqres.in",
+		"password": "cityslicka"
+	}
+	Response :-
+	{
+		"token" : "avhdbhcbgvbhbhvgvxbhgvcfcfgvbhjnbhgcffgbhnmbhgvcfvb"
+	}
+	
+Postman internally accepts JS code :- 
+
+/////////////////// Here we've written three test cases for get request //////////////////////////////////
+tests["validating status code"] = responseCode.code == 200;
+tests["validating response body"] = responseBody.has("data");
+var response = JSON.parse(responseBody);
+tests["page no"] = response.page == 2
+///////////////////// we've written two test cases for get request//////////////////////////////////////////////////////////////////////
+var response = JSON.parse(responseBody);
+tests["Verify first_name"] = response.data.first_name == "Janet"
+tests["Verify last_name"] = response.data.last_name == "Weaver"
+///////////////////// we've written three test cases for Post request while login ///////////////////////////////////////////////////////////////////////
+
+-> Data Driven Testing :- we can execute our same request with multiple sets of data means we'll take the data from files in postman.
+		So in postman, test data we can perpare either in JSON format or in CSV format.
+		req url(post) :- http://dummy.restapiexample.com/api/v1/create
+		req  body/payload :-
+			{
+				"name" : "John" ,
+				"salary" : 20000 ,
+				"age" : 35
+			}
+		Data format :- CSV , JSON
+		
+		postman syntax :- 
+		req  body/payload :-
+			{
+				"name" : "{{name}}" , // this will get data drom CSV or JSON file 
+				"salary" : "{{salary}}" ,
+				"age" : "{{age}}"
+			}
+		we cn't run directly now , we need runner 
+-> How to Run Collection
+		How to run single collection(which includes multiple requests):
+		    --> go to runner --> select collection requests --> Run
+		How to run postman collection/requests from command line 
+			--> export the collection (because this collection info stored in the cloud environment , can't directly access i.e gmail , not stored in the local environment)
+		    --> so now we will run through command prompt but some pre-requists r there
+				1)Insatll Node.js(npm)( for check ... node -v , npm -v)
+				2)Install newman(specially for reporting purpose we use this)
+					--> from the command prompt itself , we can directly install , By using node package manager(npm) we can install multiple softwares on top of Node js
+					--> Node JS is actual s/w and npm is one of component in node js 
+					--> if i want to install any other plugins in top of node js we use npm
+					--> npm install -g newman 
+					--> for generate the HTML report :- npm install newman-reporter-html
+					--> Method 1 :- newman run <<exportedfile.json>>  // get the informatiom
+					--> Method 2 :- but i need the informatiom in the HTML format  ... newman run <<exportedfile.json>> -r html
+					--> Method 3 :- without export means execute collection remotely ..... share collection -> select workspace -> get public link 
+									newman run <<publicLink>> , newman run <<publicLink>> -r html // in html format 
+					
+-> Export/importing collections
+
+
+we're going for validate header part :- 
+	we need to write JS function bcz postman internally uses JS func , can't write the directly statement.
+	pm.test("check content-type header" , function(){
+		pm.response.to.be.header("Content-Type" , "application/json");
+	});
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-----> how to create own API's (Fake API's)
+1)Insatll NodeJS
+2)npm comes with node.js
+3)install json-server ....npm install -g json-server
+4)So we need to populate the data from api on json server 
+5)create info.json file with sample data 
+6)json-server info.json  // run this command to make our API's up and running
+		--> here we'll get output as a api url e.g http://localhost:3000/users
+7)we can use this url from postman 
+
+
+--> Postman Variables :- 1)Collection variables(within collection) ... we can "edit" the collection and go into the Variables and define here.
+						 2)Environment variables/Global variables(throughout multiple collections) ...  
+								we have to go settings at right topcorner (Manage Environments) -> global(for all environments) or add -> add environment name and variables
+								e.g QA , DEV , UAT etc
+		- we can also create variable and use that in multiple requests e.g http://localhost:3000 is same in every request , so we'll store in one variable.
+		- In future also , we don't need to change in every request , only just need to change at one place.
+		- e.g {{url}}/users
+		
+	Pre-request Scripts :- we need to write one script. That "script" will be executed before sending the request.
+		- variables can also create before sending the request.
+		- e.g postman.setGlobalVariable("url" , "http://localhost:3000");
+		
+		
+	Qns :- ) How we can control the flow of execution of our requests of collection ?
+	Ans :-  we want to change the default order :-
+			Command under Tests :- 
+				postman.setNextRequest("{{nameOfNextRequestOfCollection}}")
+				postman.setNextRequest("null") // last request
+	
+
+
+	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

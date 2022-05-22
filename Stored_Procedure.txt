@@ -1,0 +1,244 @@
+1) Inside DB "Stored Procedure" is there.
+2) Callable Statement: From java appln, if we want to call stored procedure which is stored in the database, then we go for "callable statement".
+3) From java point of view, a group of java statements repeatedly required, then we'll use method.
+4) From DB point of view, a group of sql queries repeatedly required. Ex: new employee joined a company.
+		1) add one record in employee table.
+		2) add one record in payments table.
+		3) add one record in activites table.
+		4) add one record in time sheets table.
+	If we've such type of repeatedly required queries, we can keep above piece of code into "Procedure".
+		e.g procedure addNewEmployee()
+			=
+			 add one record in employee table.
+			 add one record in payments table.
+			 add one record in activites table.
+			 add one record in time sheets table.
+			=
+	we can call the procedure, those all the queries will automatically execute.
+	
+5) Stored Procedure:- Inside DB, procedure stored permanently , thats why called Stored Procedure.
+		Three types of parameters, stored procedure can accept. 
+			1) IN parameter:- to provide Input values
+			2) OUT parameter:- to collect output values
+			3) INOUT parameter:- to provide input values and to collect output values.
+			
+			e.g 1) z:= x+y; => X,Y are in parameters and Z is output parameter.
+				2) x:= x+x; => X is INOUT parameter.
+				
+How to create and execute stored procedure in oracle?
+oracle: PL/SQL procedure
+PL/SQL is not case-sensitive
+
+Syntax: 
+	create or replace procedure procedure1(X IN number, y IN number, Z OUT number) as
+		BEGIN
+			z:= x+y;	
+		END;
+		/          -> '/' for compilation
+		
+	show errors;
+	
+	variable sum number;
+	
+	execute procedure1(100 , 200 , :sum);
+	print sum;
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Find salary of employee based on employee no:
+
+	create or replace procedure procedure2(eno1 IN number, esal1 OUT number) as
+		BEGIN
+			select esal into esal1 from employees where eno=eno1;	
+		END;
+		/  
+	variable salary number;
+	
+	execute procedure2(100 , :salary);
+	print salary;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+connection from java to DB.
+Three types of statement are there in JDBC.
+	Statement(I) <- PreparedStatement(I) <- CallableStatement(I)
+	
+Qns) Who is the responsible to provide implementation of CallableStatement?
+Ans) Driver software vendor
+
+Qns) How to create statement object?
+Ans) Statement s1 = con.createStatement();  // connection interface contain createStatement method, by using, we can create statement object
+	 PreparedStatement pst = con.prepareStatement(sqlQuery);
+	 CallableStatement cst = con.prepareCall(Strig procedureCall);
+	 
+e.g of CallableStatement:
+	 CallableStatement cst = con.prepareCall("{call addProc(?,?,?)}"); // JVM will send call to database , DB engine will check whether specified stored procedure is available or not.
+	 call -> JDBC keyword
+	 addProc -> Procedure name
+	 (?,?,?) -> Parameters
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////	 
+-> 	Mapping Java types to Database types by using JDBC "Bridge types" :-
+		Java        	JDBC data types					Oracle
+		int         	Types.INTEGER					number
+		float       	Types.FLOAT						number
+		String      	Types.varchar					varchar,varchar2
+		date        	Types.DATE						date
+		
+	Only for Stored Procedure, "JDBC Data types" , to map java specific data types to DB specific types and vice-versa.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-> Process to call stored procedure from java appln by using CallableStatement:-
+  1) Make sure Stored procedure already in the database.
+		create or replace procedure addProc(num1 IN number, num2 IN number, num3 OUT number) as
+		BEGIN
+			num3:= num1+num2;	
+		END;
+		/ 
+		commit;   // must we've to use
+  2) Create CallableStatement Object
+		CallableStatement cst = con.prepareCall("{call addProc(?,?,?)}");
+  3) provide values for every IN parameter by using corresponding setter methods
+		cst.setInt(Index,Value);
+		cst.setInt(1,100);
+		cst.setInt(2,200);
+  4) Register every out parameter with JDBC type.
+  		cst.registerOutParameter(index, jdbcType);
+		cst.registerOutParameter(3,Types.Integer);
+  5) Execute procedure call
+		cst.execute();
+  6) get result from output parameter.
+		int result = cst.getInt(index);
+		int result = cst.getInt(3);
+///////////////////////////////////////////////////////////////////////////////////////
+main() throws SQLException{
+	Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "bhim","password123");
+	CallableStatement cst = con.prepareCall("{call addProc(?,?,?)}");
+	cst.setInt(1,100);
+	cst.setInt(2,200);
+	cst.registerOutParameter(3,Types.INTEGER);
+	cst.execute();
+	int result = cst.getInt(3);
+	con.close();
+}
+/////////////////////////////////////////////////////////////////////////////////////////
+Cursor concept :
+
+context area: special memory area in DB.
+Inside DB software , after execute our SQL query , the results of queries will be stored inside "context area"(Memory area). Now to access these results of SQL query from 
+	context area , we should go for "Cursor" concept.
+Two types of cursors in db.
+1) implicit cursors :- some cursors created automatically by database software when a particulare type of query execute. 		
+2) explicit cursors :- Created by the programmer to hold the results of particular type of SQL queries.
+		1) SYS_REFCURSOR to get result of ResultSet. If we execute select query, then we'll get resultset , if wants to get records one by one.
+		2) %ROWCOUNT:- to hold the result of non-select queries i.e insert , delete, update queries.
+		3) %FOUND:- to hold the result of non-select queries. To check whether any rows is affected or not.
+////////////////////////////////////////////////////////////////////////////////////////////		
+create or replace procedure getAllEmployeeInfo(emps OUT SYS_REFCURSOR) as
+BEGIN
+	open emps for
+	select * from employees
+END;
+/ 	
+
+create or replace procedure getAllEmployeeInfo1(sal IN number, emps OUT SYS_REFCURSOR) as
+BEGIN
+	open emps for
+	select * from employees where esal>sal;
+END;
+/ 
+
+Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "bhim","password123");
+CallableStatement cst = con.prepareCall("{call getAllEmployeeInfo(?)}");
+cst.registerOutParameter(3,OracleTypes.CURSOR);
+cst.execute();
+ResultSet rs = (ResultSet)cst.getObject(1);
+boolean flag = false;
+while(rs.next()){
+	flag = true;
+	sop(rs.getInt(1) + "" + rs.getString(2) + "" + rs.getFloat(3));
+}
+if(flag==false){
+	sop("No records found")
+}
+con.close();
+///////////////////////////////////////////////////////////////////////////////////////////////////
+CallableStatement "Functions":
+1) Functions are exactly same as a procedures except that function has return statement directly.
+2) procedure can also return values indirectly in the form of OUT parameters.
+3) Usually we can use procedure to define "business logic" means insert queries and use functions to perform some "calculations" like getAverage(), getMax() etc.
+
+create or replace function getAvg(id1 IN number, id2 IN number) return number as 
+sal2 number; // variable declarations
+sal3 number;
+BEGIN
+select esal into sal2 from employess where eno = id1;
+select esal into sal3 from employess where eno = id2;
+return (sal2+sal3)/2;
+END;
+/	
+
+// we need to use positional parameter i.e ?= , it will hold return value from fn
+CallableStatement cst = con.prepareCall("{?=call getAvg(?,?)}");  // here also we have three indexes
+cst.setInt(2,100);
+cst.setInt(3,200);
+cst.registerOutParameter(1,Types.FLOAT);
+cst.execute;
+sop(cst.getFloat(1));
+///////////////////////////////////////////////////////////// statement vs preparedStatement vs callableStatement //////////////////////////////////////////////////
+1)Statement(I): If want to execute multiple queries.
+	Statement st = con.createStatement();
+	st.executeUpdate("insert query");
+	st.executeUpdate("delete query");
+	st.execute("execute query");
+	Adv: Only "one statement obj" is required to execute n number of queries. It can work with multiple queries, is not problem at all.
+	Problem: I want to execute same query multuple times , it will compile and execute that much of time, performance is decreased
+2)PreparedStatement : If we want to execute same query multiple times.
+	PreparedStatement pst = con.prepareStatement(sqlQuery);  // here only, sqlQuery will a compile , can execute multiple times
+	pst.executeUpdate(); 
+	pst.executeUpdate();
+	pst.executeUpdate();
+	pst.executeUpdate();
+	Adv: Query will be compile only once, can execute multiple times. Performance increased.
+	Problem: Same PreparedStatement obj can't use for another query. Again need to create another object.
+3)CallableStatement: I want to call stored procedures/functions from DB inside JDBC appln, which contain a group of multiple queries.
+	CallableStatement cst = con.prepareCall("{call getEmpInfo(?,?)}");
+	cst.execute();
+
+///////////////////////////////////////////////////////////////// Batch updates//////////////////////////////////////////
+Batch update concept is only applicable for non-selected queries: insert, update, delete but not for select query.
+disA: If in the batch any one query fails, rest of queries will not executes.
+without batch update:
+	1) Statement: Java to DB call.
+		Time per 1 Query: req time + compile time + execution time + response time = 1 + 1 + 1 + 1 = 4ms
+		Time per 1000 Query: 1000 * 4sms = 4000ms
+		
+	2) PreparedStatement: Big adv is , query will be compile only once, at begning time only.
+		Time per 1 Query: req time + execution time + response time = 1 + 1 + 1 = 3ms
+		Time per 1000 Query: 1000 * 3ms = 3000ms
+With Batch updates: All the queries will group into single batch and at a time will send to the database.
+	1) Statement: Java -> Batch of queries -> DB call.
+		Time per 1000 Query: req time + compile time + execution time + response time = 1 + 1000*CT + 1000*ET + 1 = 2002ms
+		N/w traffic also reduced.
+		
+	2) PreparedStatement:  Java -> Batch of queries -> DB call.
+		Time per 1000 Query: req time + execution time + response time = 1 + 1000*ET + 1 = 1002ms
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

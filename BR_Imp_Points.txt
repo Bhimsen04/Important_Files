@@ -1,0 +1,10 @@
+1) Buiness-rule-service -> right click on build.gradle -> import gradle project -> RHS gradle will come -> then refresh
+
+2) Getting exception :- createprocess error=206 the filename or extension is too long
+	     fix :- Run -> Edit configurations -> Shorten command line -> select "JAR manifest ...." -> Apply -> ok
+		 
+		 
+		 
+From restApi i have to call mountebank server and post the imposter ...... request 
+	
+	

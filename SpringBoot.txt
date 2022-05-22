@@ -1,0 +1,86 @@
+1) STS tool
+2) Add Dependency :- For importing certain maven configuration. This is parent , remaining dependcies child of this and inherited parent.
+					 What jars and versions we need for child dependencies.
+	<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.12.RELEASE</version>
+	</parent>
+The spring-boot-starter-parent is a project starter. It provides default configurations for our applications. 
+It is used internally by all dependencies. All Spring Boot projects use spring-boot-starter-parent as a parent in pom. xml file.
+3)  <dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+	
+Qns) Did we download and install the tomcat server?
+Ans :-  No , this came with spring boot. Thats why output of springboot is a standalone application. Standalone means we don't have to create a 
+		servlet container.Springboot will do.
+		If we have 10 microservices , In spring we have to add 10 times apache tomcat server. In spring boot , not need to do this.
+	
+	
+1)  @SpringBootApplication :- This annotation tells springboot this is starting point for our springboot application.Now it'll create a servlet container and 
+				host this application i.e main method into servlet container.Spring will do all this stuff for us. e.g  
+		@SpringBootApplication
+		public class CourseApiApp {
+
+			public static void main(String[] args) {
+
+				SpringApplication.run(CourseApiApp.class, args);
+			}
+		}
+		
+2)  By default get Request.
+	@RestController :- We know we have to get http rest requests and http rest responses.
+	
+	@RestController
+	public class HelloController {
+
+		@RequestMapping("/hello")
+		public String sayHi() {
+			return "Hi";
+		}
+	}
+	
+	Response when we are sending back e.g List<Student> Spring MVC convert into JSON format(because of @RestController).
+	
+	
+3)
+	Resources :- Topic , Course , Lesson
+	@RestController , @Service (Only once object created in memory by seem these annotations) , 
+	
+	
+4) 
+@RestController
+public class TopicController {
+
+	@Autowired
+	private TopicService topicService;
+
+	@RequestMapping("/topics")
+	public List<Topic> getAllTopics() {
+		return topicService.getAllTopics();
+	}
+
+	@RequestMapping("/topics/{id}")
+	public Topic getTopic(@PathVariable String id) {
+		return topicService.getTopic(id);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/topics")
+	public void addTopic(@RequestBody Topic topic) {
+		topicService.add(topic);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/topics/{id}")
+	public void updateTopic(@RequestBody Topic topic, @PathVariable String id) {
+		topicService.updateTopic(topic, id);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/topics/{id}")
+	public void deleteTopic(@PathVariable String id) {
+		topicService.deleteTopic(id);
+	}
+
+}

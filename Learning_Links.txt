@@ -1,0 +1,27 @@
+Common Links:
+	1) https://www.youtube.com/c/SivaReddyJavaTechie/playlists
+
+Design Patterns:
+	1) https://www.youtube.com/watch?v=JFvSCobD7JU&list=PLyHJZXNdCXselvpjEhygQ9GlDQihtQj6i&index=2
+System Design:
+	1) https://www.youtube.com/watch?v=3loACSxowRU&list=PLhgw50vUymycJPN6ZbGTpVKAJ0cL4OEH3
+	2) https://www.youtube.com/watch?v=FSR1s2b-l_I&list=PLTCrU9sGyburBw9wNOHebv9SjlE4Elv5a   // yogita
+	3) https://www.youtube.com/watch?v=B3zrIwz_t4M&list=PLTCrU9sGybupCpY20eked6blbHI4zZ55k   // yogita
+	4) https://www.youtube.com/watch?v=2BWr0fsDSs0                                           // gourav and yogita
+DS:
+	Recusrsion: https://www.youtube.com/watch?v=IJDJ0kBx2LM
+Spring: 
+	https://www.youtube.com/watch?v=WHoEeYcdq5M&list=PLyHJZXNdCXsdXxY8wupiLenux2Yafn1lN
+AWS:
+	https://www.youtube.com/watch?v=DxveVHN4Ymg&list=PLBGx66SQNZ8a_y_CMLHchyHz_R6-6i-i_
+	
+Liquibase: 
+	https://www.youtube.com/watch?v=Ol0vblZ5zLs&list=PL8LikImwls6IM8Ks9CvpnU4UbcBCJUd3C&index=5
+	
+K8s:
+	https://www.youtube.com/c/GouravSharma/playlists
+	
+Thread pool:
+	https://www.youtube.com/watch?v=Qgz6p-y-YUE      // by durga
+	https://www.youtube.com/watch?v=MB_qCXBSgK0&list=PLL8woMHwr36EDxjUoCzboZjedsnhLP1j4&index=14
+	pending: completablefuture in spring boot

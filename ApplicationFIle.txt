@@ -1,0 +1,14 @@
+server.port=8082
+management.endpoint.health.show-details=always
+
+// for info(We'll get in the form of JSON)
+info.app.encoding = UTF-8
+info.app.java.source = 1.8
+info.app.java.target = 1.8
+info.name.of.app = User management application
+
+// for changing the base path from actuator to {any}
+management.endpoints.web.base-path=/userApp   
+
+#management.endpoint.health.enabled=false
+management.endpoints.web.exposure.include=*

@@ -1,0 +1,35 @@
+Agents  :-         Agent name :- e.g CustomerCareChatbot (Agent created)
+				   All things comes under agent :- 1)Intents 2)Training 3)Integrations
+Intents :-         1)default Welcome Intent 2)ask a question 3)book a flight ticket
+				   We have "default Welcome Intent" they have training phrase like hello,hi,hey......etc
+				   Intention of the user like user have intention of asking a question or anything else e.g "ask a question".
+				   User can ask in multiple ways same question thats why add multiple possibles in training phrases of intents of agent in DialogFlow.
+				   User phase one of these things means user intention is ask a question.
+				   Now we need to define a response(or multiple responses) if he ask a question.we define response in text response of responses of intent of agent.
+				   Test-response :- OK , you want to drive $car car
+follow-up intent:- what should then after this intent is triggered(this option is R.H.S of intent).
+                   When we add follow-up intent it adds the Context in and Context-out.
+				   Context-out(bookaticket-followup) for at which we click at add follow-up intent  and Context-in(bookaticket-followup) for follow-up intent
+Contexts        :- Context-in  :- For what intent user is talking
+                   Context-out :- 
+				   If input context is songs which matches to output context of previous intent.So then we can identify user is talking about previous intent
+				   e.g  intent :- songs
+				           context-out :- songs
+				        intent :- play it songs  
+				           context-in :- songs   (Here we can identify user is talking about songs intent)
+Entities        :- 1 )  System-defined Entities e.g :- London,next-week
+                   Chatbot understands destination is "London" and travel "next-week".Here London and next-week is entity.
+                   In this case we use action and parameters in Intents.
+				   In action :- 1) Parameter name :- city , Entity :- @sys.geo.city(System define entity) , Value :- $city
+				                2) Parameter name :- date , Entity :- @sys.date.period(System define entity) , Value :- $date
+				   Required option :- For mandatory , if user not ask then chatbot ask needs (We add a message in "prompt" option)
+				   
+				   2)  Custom-defined Entities(:- e.g Paris)and Templates :- In Training Phrase (I want to drive @car:car)  @car is Custom-defined Entitiy
+				   Create entity :- e.g car    after that , enter reference vale and synonym(multiple names)
+Training        :- Sometimes chatbot fails to understand.In this section we train our chatbot means if next time same question ask chatbot will understand and 
+                   it will answer it correctly.
+				   
+				   
+				   
+				   
+				   

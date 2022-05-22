@@ -1,0 +1,47 @@
+EC2 based kubernate environmnet in AWS
+db-init-service 
+
+Hi team,  Today is second demo on service virtulization , in first demo we've seen what is service virtulization and what prerequisite needs to use
+mountebank. But in first demo we had some queries so today i'll try to overcome those queries.
+we thought we will call the actual api as usaual and if any kind of exception comes then we can call there fallback method , that time mountebank 
+comes into picture where we can get the customize response from the mountebank, so now i am going to show customize response after some validations.
+
+i've considered dashboard api so whatever response we're getting here based on request , same also we're able to get from mountebank nd now 
+woking on implement mounte bank in business rule service.
+
+63586
+
+
+so this week our motive is call mountebank from the any dataprocessor then deploy in the higher environmnets.
+
+
+
+In production , we always through the errors not the mock response so do the confogurations based on environment
+if the code is not working then we've to fix the code means not return the mock response
+we can use there if something is pending from BA , send the mock response in terms of swagger file or something 
+It is moreover stubbing the actula service
+we can toggle the switch -> all or some my services will be stbbed , even that can remain in the production code , toggle will not work in the production code
+
+I have to design it carefully so that it can be toggle , either the real api called or stub getting called , both cannot happen at the same time , 
+that toggling should be through external switch , it should be environmnet configurable.
+
+Don't think in terms of making the call to real api , if fails i will call mb , that is not purpose of stub , that would be done by a circuit breaker ,
+so this is not a circuit breaker.
+
+I'll need to come up with the design or approach which will take external flag , which will cinfigure at the environmnet level , and depending on that flag ,
+we'll either make call to stub or call to the real api. It may be useful , because even it is not for all api's .... for some of the api's like MFRS , LRS , GBI
+totally external they may be down , it might be helpful in those cases
+
+Next Meeting Agenda's approach :- 
+	How we can toggle it , we have to make call to both the api's either one or the other api at run time , preferably w/o restart the server
+	But for that i can use database column as well , if i need , 
+
+	
+remedy ticket
+
+diff
+
+
+
+
+

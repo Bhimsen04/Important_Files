@@ -1,0 +1,112 @@
+File->Settings > Compiler > Annotation Processors > Enable Annotation Processing
+cmd -> idea64.
+
+Ctrl+Alt+S :- Settings
+Double Shift :- Search Everywhere
+Alt+Enter :- Show Context Actions(creater constructor and getters , setters for a particulat variable.... etc) , create methods
+alt+insert :- creater constructor and getters , setters for all
+Ctrl+E	:- View recent files(classes , config files... etc)
+Ctrl+Alt+L	:- Reformat Code
+Ctrl+Alt+O :- This will remove unused imports and format the import list as well.
+Ctrl+Alt+M :- Create a code in method
+Ctrl+Alt+P :- Introduced new parameter after click on any variable in method
+ctrl+d :- creating duplicate code or line
+ctrl+shift+t :- for creating new Junit test 
+Ctrl+Alt+Shift+T :- Invoke refactoring
+Ctrl+W or Ctrl+Shift+W	:- Extend or shrink selection
+Ctrl+/ or Ctrl+Shift+/	:- Add/remove line or block comment
+Ctrl+B	:- Go To Declaration
+
+Alt+F7	:- Find Usages   // ctrl + shift + alt + f
+ctrl+alt+h :- From where where method is called(Full hierachy)
+
+alt+7 :- Get all methods in the class
+Alt+1 :- Focus the Project tool window
+Escape  :- Focus the editor
+ctrl+alt+b :- to see the implementation classes of interface
+ctrl+click on method :- show where it is using
+ctrl+shift+f :- search variable in whole project
+ctrl+shift+t :- to create a new test
+ctrl+g :- line no
+ctrl+shift+f8 :- Regarding debug points
+ctrl+alt+v :- select all and use shortcut , automatically creates variables for us.  e.g Stream.of(1);
+
+alt + back quote(~) :- for see the VCS operations
+ctrl + back quote(~) :- for see the so many options e.g keymap 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Plugins :- 
+1) Presentation Assistant
+2) GitToolBox :- to see who write a code
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+Which kubernate box having my namespace :- 216
+In 216 somebody,  need to install mountebank because i'm deploying a code in 216 box only ..... ask someone to deploy at any box
+	so now mountebank is rumming in particular box
+I have to use postman for post the imposter for connect with mountebank ,  then we can consume our response from data processor
+
+Create one more mountebank in other box and Post your json via restClient i.e postman then we can consume our response from data processor
+if everything success then we can look into this posting imposter in our code 
+
+
+
+we've 800 rules and all r not up so through mountebank we can create dummny rules ..... 
+postman to mountebank(Imposter)  ...... stubs(API's)  ........ from business-rule-service get the response and do Predication and Response.... send back to postman
+
+
+Is Corruption in Economy the root cause for Indian Economic slowdown?
+
+Yes , Abosoluety Corruption . because i've seen at so many places in schools , civil contracts like in terms of roads and building construcion , corruption is there .. in sprts also
+everywhere ... to get a g
+
+
+trading-cache
+compliance-service
+zoom-shared-model
+db-init-service
+
+
+
+
+
+Kafka-service
+file-processing-service
+fix-receiver-service
+fix-sender-service
+persister-service
+business-rules-service
+compliance-service
+order-new-service
+db-init-service
+
+
+

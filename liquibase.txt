@@ -1,0 +1,163 @@
+Steps to configure download derby and configure in eclipse:
+1) first downladed the derby databse. Link:- https://archive.apache.org/dist/db/derby/db-derby-10.12.1.1/
+2) Then double click on startNetworkServer in the bin folder of derby downloaded.
+3) open eclipse -> windows -> show views -> other -> Data Managment -> Data Source Explorer.
+4) In Data Source Explorer tab -> configure derby. How??
+5) Right click on Database connections in Data Source Explorer tab -> New -> Derby -> Dribers(click on New Driver Definition) -> 
+select name /type as a "select Derby Client JDBC Driver:10.2" -> 
+select JAR list , removed existing one , add new one , derbyclient from lib folder -> 
+select Properties and give own user ID and password ->
+finally test connection.
+6) Do maven configurations and create new changelog files.
+7) Execute liquibase using "mvn liquibase:update" in terminal
+8) expand Database connections -> go to schemas -> LIQUIBASE -> Tables.
+
+====================================================================================================================================
+URL: jdbc:derby://localhost:1527/sample;create=true
+Database Name: SAMPLE
+Driver class: org.apache.derby.jdbc.ClientDriver
+User id: liquibase
+Password: liquibase
+
+====================================================================================================================================
+
+<!-- https://mvnrepository.com/artifact/org.apache.derby/derbyclient -->
+<dependency>
+    <groupId>org.apache.derby</groupId>
+    <artifactId>derbyclient</artifactId>
+    <version>10.12.1.1</version>
+</dependency>
+
+<build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.liquibase</groupId>
+  			<artifactId>liquibase-maven-plugin</artifactId>
+  			<version>3.6.1</version>
+  			<configuration>
+  				<changeLogFile>src/main/resources/org/liquibase/change-master.xml</changeLogFile>
+  				<driver>org.apache.derby.jdbc.ClientDriver</driver>
+  				<url>jdbc:derby://localhost:1527/sample;create=true</url>
+  				<username>liquibase</username>
+  				<password>liquibase</password>
+  			</configuration>
+  			<executions>
+  				<execution>
+  					<phase>process-resources</phase>
+  					<goals>
+  						<goal>update</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
+  	</plugins>
+</build>
+
+===================================================================================================================================
+
+master-changelog.xml
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd 
+   http://www.liquibase.org/xml/ns/dbchangelog 
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+    <changeSet id="change_1" author="bhim">
+    	<createTable tableName="Emp">
+	    	<column name="EmpId" type="int"></column>
+	    	<column name="EmpName" type="string"></column>
+    	</createTable>
+    </changeSet>
+    
+</databaseChangeLog>
+  
+-> mvn clean
+-> mvn liquibase:update    // for build liquibase script
+
+
+<preConditions>
+	<dbms type="oracle"/>         // src/mainresources/db/changelog/master-changelog.xml : DBMS Precondition failed: expected oracle, got derby
+	<dbms type="derby"/>
+	<runningAs username="SYSTEM"/> // RunningAs Precondition failed: expected SYSTEM, was liquibase
+	<runningAs username="liquibase"/>
+</preConditions>
+
+// but now we want to give custom fail message 
+<preConditions onFail="HALT" onFailMessage="Unauthorized aceess">
+	<dbms type="derby"/>
+	<runningAs username="SYSTEM"/> //  src/main/resources/db/changelog/master-changelog.xml : Unauthorized aceess
+</preConditions>
+
+// but now we want to give custom error message 
+<preConditions onError = "HALT" onErrorMessage="custom error message">
+	<dbms type="derby"/>
+	<runningAs username="SYSTEM"/> //  src/main/resources/db/changelog/master-changelog.xml : Unauthorized aceess
+	<columnExists tableName="" columnName=""/>
+	<rowCount expectedRows="0" tableName=""/>
+</preConditions>
+
+-->
+<property name = "alias_table_name" value="Emp"/>
+<property name = "alias_table_name2" value="Dept"/>
+<changeSet id="change_1" author="bhim">
+	<createTable tableName="${alias_table_name}">
+		<column name="EmpId" type="int"></column>
+		<column name="EmpName" type="varchar(10)"></column>
+	</createTable>
+</changeSet>
+<changeSet id="change_2" author="bhim">
+	<createTable tableName="${alias_table_name2}">
+		<column name="DeptId" type="int"></column>
+		<column name="DeptName" type="varchar(10)"></column>
+	</createTable>
+</changeSet>
+
+======================================================================================================================================
+--> As a database and project grows, then we can use "include" in master-changelog file :-
+	1) we can one master-changelog.xml file.
+	2) We create as much as new files based on our changesets.
+	3) Only Path of the All changeset files, we'll include into the master-changelog.xml file by "include" tag.
+	
+// master-changelog.xml
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd 
+   http://www.liquibase.org/xml/ns/dbchangelog 
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    
+	<include file="src\main\resources\db\changelog\changelog1.xml"/>
+	<include file="src\main\resources\db\changelog\changelog2.xml"/>
+    
+</databaseChangeLog>
+
+-> first, drop all the existing SQL based migrations, so we can see empty schemas using command i.e mvn liquibase:dropAll
+
+-> <changeSet id="change_1" author="bhim" runAlways="true">  // It will always execute whether changes happend or not. 
+-> <changeSet id="change_1" author="bhim" runInTransaction="true>  // It will check whether transaction completed successfully.
+
+Note: If we're trying to add column in existing changeset and if it is also there in DataBaseChangeLog, it will check checkSum(column in DataBaseChangeLog: MD5SUM), now we've previous as well as latest, we'll get an error i.e validation error , so soln:
+Solution: // not support to create the triggers, functions, stored procedure.
+
+-> mvn liquibase:generateChangeLog    // using this we can see all the change logs in the existing databse
+-> mvn liquibase:updateSQL            // It will generate the one sql file, where we can see our sql file if we're doing any changes but not 
+                                         INSERT into table, only show the queries , we can review our queries before proceed.
+-> mvn liquibase:update               // It will insert the records
+
+
+
+
+
+
+
+
+
+
+
+
+
